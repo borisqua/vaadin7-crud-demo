@@ -1,11 +1,15 @@
 package com.haulmont.testtask;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-@Theme(ValoTheme.THEME_NAME)
+//@Theme(ValoTheme.THEME_NAME)
 public class MainUI extends UI {
 
     @Override
