@@ -5,7 +5,7 @@ garbage
 
 ### misc. & OS specific ###
 desktop.ini
-git-add-commit-push.cmd
+./git-add-commit-push.cmd
 
 ### STS ###
 .apt_generated
