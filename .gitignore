@@ -5,6 +5,7 @@ garbage
 
 ### misc. & OS specific ###
 desktop.ini
+git-add-commit-push.com
 
 ### STS ###
 .apt_generated
@@ -20,7 +21,6 @@ desktop.ini
 *.iws
 *.iml
 *.ipr
-git-*.*
 
 ### NetBeans ###
 /nbproject/private/
