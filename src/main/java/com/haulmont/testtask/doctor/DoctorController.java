@@ -1,4 +1,4 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.doctor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +26,24 @@ public class DoctorController {
   @RequestMapping(method = GET, path = "/get")
   public @ResponseBody
   Optional<Doctor> getDoctor(@RequestParam(name = "id") Long id) {
+    return doctorRepository.findById(id);
+  }
+  
+  @RequestMapping(method = GET, path = "/add")
+  public @ResponseBody
+  Optional<Doctor> addDoctor(@RequestParam(name = "id") Long id) {
+    return doctorRepository.findById(id);
+  }
+  
+  @RequestMapping(method = GET, path = "/update")
+  public @ResponseBody
+  Optional<Doctor> updateDoctor(@RequestParam(name = "id") Long id) {
+    return doctorRepository.findById(id);
+  }
+  
+  @RequestMapping(method = GET, path = "/remove")
+  public @ResponseBody
+  Optional<Doctor> removeDoctor(@RequestParam(name = "id") Long id) {
     return doctorRepository.findById(id);
   }
   

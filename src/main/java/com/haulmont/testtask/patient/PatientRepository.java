@@ -1,4 +1,4 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.patient;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.prescription;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -8,11 +8,11 @@ import java.sql.Date;
 @Table(name = "prescriptions")
 public class Prescription {
   
-  public enum Priority {
-    UNSOLET,
-    CITO,
-    STATIM
-  }
+//  public enum Priority {
+//    UNSOLET,
+//    CITO,
+//    STATIM
+//  }
   
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,11 +22,12 @@ public class Prescription {
   private Long patientId;
   private Date creationDate;
   private Integer validityLength;
-  private Priority priority;
+//  private Priority priority;
+  private String priority;
   
   public Prescription(){}
   public Prescription(Long doctorId, Long patientId, String description,
-                      Date creationDate, Integer validityLength, Priority priority) {
+                      Date creationDate, Integer validityLength, String/*Priority*/ priority) {
     this.doctorId = doctorId;
     this.patientId = patientId;
     this.description = description;
@@ -79,11 +80,11 @@ public class Prescription {
     this.validityLength = validityLength;
   }
   
-  public Priority getPriority() {
+  public String/*Priority*/ getPriority() {
     return priority;
   }
   
-  public void setPriority(Priority priority) {
+  public void setPriority(String/*Priority*/ priority) {
     this.priority = priority;
   }
   

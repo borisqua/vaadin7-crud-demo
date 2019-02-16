@@ -1,31 +1,34 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.doctor;
 
 import javax.persistence.*;
 
 @SuppressWarnings({"WeakerAccess","unused"})
 @Entity
-@Table(name="patients")
-public class Patient {
+@Table(name="doctors")
+public class Doctor {
+  
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String name;
   private String surname;
   private String patronymic;
-  private String phone;
+  private String specialization;
   
-  public Patient(){}
-  public Patient(String name, String surname){
+  public Doctor(){}
+  public Doctor(String name, String surname){
     this(name, surname, "", "");
   }
-  public Patient(String name, String surname, String phone){
-    this(name, surname, "", phone);
+  public Doctor(String name, String surname, String specialization){
+    this(name, surname, "", specialization);
   }
-  public Patient(String name, String surname, String patronymic, String phone) {
+  public Doctor(String name, String surname, String patronymic, String specialization) {
+    
     this.name = name;
     this.surname = surname;
     this.patronymic = patronymic;
-    this.phone = phone;
+    this.specialization = specialization;
+    
   }
   
   public Long getId() {
@@ -56,21 +59,21 @@ public class Patient {
     this.patronymic = patronymic;
   }
   
-  public String getPhone() {
-    return phone;
+  public String getSpecialization() {
+    return specialization;
   }
   
-  public void setPhone(String phone) {
-    this.phone = phone;
+  public void setSpecialization(String specialization) {
+    this.specialization = specialization;
   }
   
   @Override
   public String toString(){
-    return "Patient {" +
+    return "Doctor {" +
       "id: " + id +
       ", name: " + name +
       ", surname: " + surname +
       ", patronymic: " + patronymic +
-      ", phone: " + phone + "}";
+      ", specialization: " + specialization + "}";
   }
 }
