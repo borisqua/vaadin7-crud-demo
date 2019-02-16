@@ -1,12 +1,13 @@
-/target/
-/garbage/
+target/
+garbage/
 garbage
 !.mvn/wrapper/maven-wrapper.jar
 
 ### misc. & OS specific ###
 desktop.ini
-./git-add-commit-push.cmd
+git-add-commit-push.cmd
 
+garbage
 ### STS ###
 .apt_generated
 .classpath
