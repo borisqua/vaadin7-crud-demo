@@ -9,6 +9,5 @@ import java.util.List;
 public interface PatientRepository extends CrudRepository<Patient, Long> {
   List<Patient> findByName(String name);
   List<Patient> findBySurname(String surname);
-  List<Patient> findByFullNameString(String fullName);
   List<Patient> findByPhone(String phone);
 }

@@ -14,6 +14,7 @@ public class Patient {
   private String patronymic;
   private String phone;
   
+  public Patient(){}
   public Patient(String name, String surname){
     this(name, surname, "", "");
   }
@@ -61,5 +62,15 @@ public class Patient {
   
   public void setPhone(String phone) {
     this.phone = phone;
+  }
+  
+  @Override
+  public String toString(){
+    return "Patient {" +
+      "id: " + id +
+      ", name: " + name +
+      ", surname: " + surname +
+      ", patronymic: " + patronymic +
+      ", phone: " + phone + "}";
   }
 }

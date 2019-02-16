@@ -3,6 +3,9 @@
 garbage
 !.mvn/wrapper/maven-wrapper.jar
 
+### misc. & OS specific ###
+desktop.ini
+
 ### STS ###
 .apt_generated
 .classpath

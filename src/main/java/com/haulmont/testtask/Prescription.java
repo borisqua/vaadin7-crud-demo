@@ -3,10 +3,16 @@ package com.haulmont.testtask;
 import javax.persistence.*;
 import java.sql.Date;
 
-@SuppressWarnings({"WeakerAccess", "unused", "FieldCanBeLocal"})
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Entity
 @Table(name = "prescriptions")
 public class Prescription {
+  
+  public enum Priority {
+    UNSOLET,
+    CITO,
+    STATIM
+  }
   
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +24,7 @@ public class Prescription {
   private Integer validityLength;
   private Priority priority;
   
+  public Prescription(){}
   public Prescription(Long doctorId, Long patientId, String description,
                       Date creationDate, Integer validityLength, Priority priority) {
     this.doctorId = doctorId;
@@ -78,5 +85,17 @@ public class Prescription {
   
   public void setPriority(Priority priority) {
     this.priority = priority;
+  }
+  
+  @Override
+  public String toString(){
+    return "Prescription {" +
+      "id: " + id +
+      ", doctorId: " + doctorId +
+      ", patientId: " + patientId +
+      ", description: " + description +
+      ", creationDate: " + creationDate +
+      ", validityLength: " + validityLength +
+      ", priority: " + priority + "}";
   }
 }

@@ -7,8 +7,8 @@ import java.util.List;
 
 @Repository
 public interface PrescriptionRepository extends CrudRepository<Prescription, Long> {
-  List<Prescription> findByDoctor(Long id);
-  List<Prescription> findByPatient(Long id);
+  List<Prescription> findByDoctorId(Long id);
+  List<Prescription> findByPatientId(Long id);
   List<Prescription> findByDescription(String pattern);
-  List<Prescription> findByPriority(Priority priority);
+  List<Prescription> findByPriority(Prescription.Priority priority);
 }

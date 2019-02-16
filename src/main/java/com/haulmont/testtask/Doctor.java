@@ -15,6 +15,7 @@ public class Doctor {
   private String patronymic;
   private String specialization;
   
+  public Doctor(){}
   public Doctor(String name, String surname){
     this(name, surname, "", "");
   }
@@ -64,5 +65,15 @@ public class Doctor {
   
   public void setSpecialization(String specialization) {
     this.specialization = specialization;
+  }
+  
+  @Override
+  public String toString(){
+    return "Doctor {" +
+      "id: " + id +
+      ", name: " + name +
+      ", surname: " + surname +
+      ", patronymic: " + patronymic +
+      ", specialization: " + specialization + "}";
   }
 }
