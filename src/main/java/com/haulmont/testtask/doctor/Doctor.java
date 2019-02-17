@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @SuppressWarnings({"WeakerAccess","unused"})
 @Entity
-@Table(name="doctors")
+@Table(name="doctor")
 public class Doctor {
   
   @Id

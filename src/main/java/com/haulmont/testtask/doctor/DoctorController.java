@@ -13,7 +13,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 @Controller
-@RequestMapping(method = GET, path = "/doctors")
+@RequestMapping(method = GET, path = "/doctor")
 public class DoctorController {
   
   private final DoctorRepository doctorRepository;
