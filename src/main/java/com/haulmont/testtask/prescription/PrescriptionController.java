@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -17,6 +22,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Controller
 @RequestMapping(method = GET, path = "/prescriptions")
 public class PrescriptionController {
+  
+  private EntityManager entityManager;
   
   private final PrescriptionRepository prescriptionRepository;
   
@@ -130,13 +137,16 @@ public class PrescriptionController {
     @RequestParam(name = "priority", required = false) String priority,
     @RequestParam(name = "pattern", required = false) String pattern
   ) {
-    if (patientId != null && priority != null && pattern != null) {
     
-    } else if (patientId != null && priority != null) {
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Prescription> criteriaQuery = criteriaBuilder.createQuery(Prescription.class);
     
-    }else if (patientId != null && priority != null) {
+    Root<Prescription> prescription = criteriaQuery.from(Prescription.class);
     
-    }
+    Predicate[] restrictions = new Array(3);
+    Predicate patientIdPredicate = criteriaBuilder.equal(prescription.get("patientId"), patientId);
+    Predicate priorityPredicate = criteriaBuilder.equal(prescription.get("priority"), priority);
+    
     return null;
   }
   
