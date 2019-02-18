@@ -19,7 +19,9 @@ patientId bigint not null,
 doctorId bigint not null,
 creationDate date default CURRENT_DATE not null,
 validityLength tinyint default 7 not null,
-priority varchar(50) default 'Нормальный' not null,  -- 'Нормальный', 'Cito (Срочный)', 'Statim (Немедленный)'
+priority varchar(50) default 'Нормальный' not null,  -- 'Un Solet (Обычно)', 'Cito (Срочный)', 'Statim (Немедленный)'
 foreign key (patientId) references patients(id),
 foreign key (doctorId) references doctors(id))
+
+set referential integrity true -- <--default setting
 

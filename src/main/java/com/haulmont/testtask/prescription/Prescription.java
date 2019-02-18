@@ -2,8 +2,9 @@ package com.haulmont.testtask.prescription;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
-@SuppressWarnings({"unused", "FieldCanBeLocal"})
+@SuppressWarnings({"unused", "FieldCanBeLocal", "WeakerAccess"})
 @Entity
 @Table(name = "prescriptions")
 public class Prescription {
@@ -16,21 +17,31 @@ public class Prescription {
   
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name="id")
   private Long id;
+  @Column(name="description")
   private String description;
-  private Long doctorId;
+  @Column(name="patientid")
   private Long patientId;
+  @Column(name="doctorid")
+  private Long doctorId;
+  @Column(name="creationdate")
   private Date creationDate;
+  @Column(name="validitylength")
   private Integer validityLength;
 //  private Priority priority;
+  @Column(name="priority")
   private String priority;
   
   public Prescription(){}
-  public Prescription(Long doctorId, Long patientId, String description,
+  public Prescription(String description, Long patientId, Long doctorId){
+    this(description, patientId, doctorId, Date.valueOf(LocalDate.now()), 7, "UNSOLET");
+  }
+  public Prescription(String description, Long patientId, Long doctorId,
                       Date creationDate, Integer validityLength, String/*Priority*/ priority) {
-    this.doctorId = doctorId;
-    this.patientId = patientId;
     this.description = description;
+    this.patientId = patientId;
+    this.doctorId = doctorId;
     this.creationDate = creationDate;
     this.validityLength = validityLength;
     this.priority = priority;

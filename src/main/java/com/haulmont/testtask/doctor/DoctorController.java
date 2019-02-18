@@ -13,48 +13,93 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 @Controller
-@RequestMapping(method = GET, path = "/doctor")
+@RequestMapping(method = GET, path = "/doctors")
 public class DoctorController {
   
   private final DoctorRepository doctorRepository;
   
   @Autowired
   public DoctorController(DoctorRepository doctorRepository) {
-    this.doctorRepository = doctorRepository;
+      this.doctorRepository = doctorRepository;
   }
   
   @RequestMapping(method = GET, path = "/get")
   public @ResponseBody
   Optional<Doctor> getDoctor(@RequestParam(name = "id") Long id) {
-    return doctorRepository.findById(id);
+    try{
+      return doctorRepository.findById(id);
+    } catch (Exception ignored){
+      return Optional.empty();
+    }
   }
   
   @RequestMapping(method = GET, path = "/add")
   public @ResponseBody
-  Optional<Doctor> addDoctor(@RequestParam(name = "id") Long id) {
-    return doctorRepository.findById(id);
+  Doctor addDoctor(@RequestParam(name = "name") String name,
+                   @RequestParam(name = "surname") String surname,
+                   @RequestParam(name = "patronymic", defaultValue = "", required = false) String patronymic,
+                   @RequestParam(name = "specialization", defaultValue = "", required = false) String specialization
+  ) {
+    try{
+      return doctorRepository.save(new Doctor(name, surname, patronymic, specialization));
+    } catch (Exception e){
+      return  null;
+    }
   }
   
+  @SuppressWarnings("Duplicates")
   @RequestMapping(method = GET, path = "/update")
   public @ResponseBody
-  Optional<Doctor> updateDoctor(@RequestParam(name = "id") Long id) {
-    return doctorRepository.findById(id);
+  Doctor updateDoctor(@RequestParam(name = "id") Long id,
+                      @RequestParam(name = "name", required = false) String name,
+                      @RequestParam(name = "surname", required = false) String surname,
+                      @RequestParam(name = "patronymic", required = false) String patronymic,
+                      @RequestParam(name = "specialization", required = false) String specialization
+  ) {
+    try {
+      Optional<Doctor> d = doctorRepository.findById(id);
+      Doctor doctor;
+      if (d.isPresent()) {
+        doctor = d.get();
+        if (name != null) {
+          doctor.setName(name);
+        }
+        if (surname != null) {
+          doctor.setSurname(surname);
+        }
+        if (patronymic != null) {
+          doctor.setPatronymic(patronymic);
+        }
+        if (specialization != null) {
+          doctor.setSpecialization(specialization);
+        }
+        return doctorRepository.save(doctor);
+      } else {
+        return null;
+      }
+    } catch (Exception e) {
+      return null;
+    }
   }
   
   @RequestMapping(method = GET, path = "/remove")
   public @ResponseBody
-  Optional<Doctor> removeDoctor(@RequestParam(name = "id") Long id) {
-    return doctorRepository.findById(id);
+  void removeDoctor(@RequestParam(name = "id") Long id) {
+    try {
+      Optional<Doctor> doctor = doctorRepository.findById(id);
+      doctor.ifPresent(doctorRepository::delete);
+    } catch (Exception ignored){
+    }
   }
   
-/*  @RequestMapping(method = GET, path = "/filter")
-  public @ResponseBody Iterable<Doctor> filter(@RequestParam(name="name", defaultValue="*") String name){
-  
-  }*/
-  
   @GetMapping("/all")
-  public @ResponseBody Iterable<Doctor> showAllDoctors(){
-    return doctorRepository.findAll();
+  public @ResponseBody
+  Iterable<Doctor> showAllDoctors() {
+    try {
+      return doctorRepository.findAll();
+    } catch (Exception ignored){
+      return null;
+    }
   }
   
 }

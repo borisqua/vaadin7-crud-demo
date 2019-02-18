@@ -4,15 +4,20 @@ import javax.persistence.*;
 
 @SuppressWarnings({"WeakerAccess","unused"})
 @Entity
-@Table(name="doctor")
+@Table(name="doctors")
 public class Doctor {
   
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name="id")
   private Long id;
+  @Column(name="name")
   private String name;
+  @Column(name="surname")
   private String surname;
+  @Column(name="patronymic")
   private String patronymic;
+  @Column(name="specialization")
   private String specialization;
   
   public Doctor(){}
