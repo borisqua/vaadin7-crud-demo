@@ -1,5 +1,7 @@
 package com.haulmont.testtask.prescription;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class PrescriptionController {
   
   private final PrescriptionRepository prescriptionRepository;
+  private static final Logger LOGGER = LogManager.getLogger();
   
   @Autowired
   public PrescriptionController(PrescriptionRepository prescriptionRepository) {
@@ -137,7 +140,8 @@ public class PrescriptionController {
     @RequestParam(name = "priority", required = false) String priority,
     @RequestParam(name = "pattern", required = false) String pattern
   ) {
-    return prescriptionRepository.findByPatientIdAndPriorityAndDescription(patientId, priority, pattern);
+    LOGGER.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2:  filterPrescription -> {}", patientId);
+    return prescriptionRepository.findByCustomCriteria(patientId, priority, pattern);
 //    return null;
   }
   

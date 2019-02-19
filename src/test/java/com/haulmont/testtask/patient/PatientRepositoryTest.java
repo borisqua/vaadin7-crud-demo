@@ -22,22 +22,22 @@ public class PatientRepositoryTest {
   
   @Test
   public void ifFoundById_successfully_then_OK() {
-    patientRepository.save(new Patient("Вася", "Василёк"));
+    patientRepository.save(new Patient("Test1Name1", "Test1Surname1"));
     assertThat(patientRepository.findById(1L)).isInstanceOf(Optional.class);
   }
   
   @Test
   public void ifFoundAll_successfully_then_OK() {
-    patientRepository.save(new Patient("Коля", "Неугомонный"));
-    patientRepository.save(new Patient("Юля", "Кроcсовкина"));
+    patientRepository.save(new Patient("Test2Name1", "Test2Surname1"));
+    patientRepository.save(new Patient("Test2Name2", "Test2Surname2"));
     assertThat(patientRepository.findAll()).isInstanceOf(List.class);
   }
   
   @Test
   public void ifSaved_successfully_then_OK() {
-    patientRepository.save(new Patient("Азраил", "ЧЁрный"));
+    patientRepository.save(new Patient("Test3Name1", "Test3Surname1"));
     Patient patient = patientRepository.findById(0L).orElseGet(()
-      -> new Patient("Азраил", "ЧЁрный"));
-    assertThat(patient.getName()).isEqualTo("Азраил");
+      -> new Patient("Test3Name2", "Test3Surname2"));
+    assertThat(patient.getName()).isEqualTo("Test3Surname2");
   }
 }

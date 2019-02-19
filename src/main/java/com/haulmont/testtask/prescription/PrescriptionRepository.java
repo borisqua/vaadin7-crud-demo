@@ -4,9 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PrescriptionRepository extends CrudRepository<Prescription, Long>, PrescriptionRepositoryCustom {
-//  Long countByDoctorId(Long doctorId);
-//  Long countByDoctorIdAndPriority(Long doctorId, String priority);
-//  Long countByDoctorIdAndDescriptionIsLike(Long doctorId, String pattern);
-//  Long countByDoctorIdAndPriorityAndDescriptionIsLike(Long doctorId, String priority, String pattern);
+public interface PrescriptionRepository extends CrudRepository<Prescription, Long>, CustomPrescriptionRepository {
+//  List<Prescription> findByCustomCriteria(Long patientId, String priority, String pattern);
 }
