@@ -1,6 +1,7 @@
 package com.haulmont.testtask.patient;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,16 @@ public class PatientController {
   @Autowired
   public PatientController(PatientRepository patientRepository) {
     this.patientRepository = patientRepository;
+  }
+  
+  @GetMapping("/all")
+  public @ResponseBody
+  Iterable<Patient> showAllPatients() {
+    try {
+      return patientRepository.findAll();
+    } catch (Exception ignored){
+      return null;
+    }
   }
   
   @RequestMapping(method = GET, path = "/get")
@@ -82,20 +93,16 @@ public class PatientController {
     }
   }
   
+  @SuppressWarnings("Duplicates")
   @RequestMapping(method = GET, path = "/remove")
   public @ResponseBody
-  void removePatient(@RequestParam(name = "id") Long id) {
+  Iterable<Patient> removePatient(@RequestParam(name = "id") Long id) {
     try {
       Optional<Patient> patient = patientRepository.findById(id);
       patient.ifPresent(patientRepository::delete);
-    } catch (Exception ignored){
-    }
-  }
-  
-  @GetMapping("/all")
-  public @ResponseBody
-  Iterable<Patient> showAllPatients() {
-    try {
+      return patientRepository.findAll();
+    } catch (DataIntegrityViolationException e) {
+      //todo>> consider how to handle this case
       return patientRepository.findAll();
     } catch (Exception ignored){
       return null;
