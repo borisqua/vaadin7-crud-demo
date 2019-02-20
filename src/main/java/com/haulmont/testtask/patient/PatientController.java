@@ -48,11 +48,11 @@ public class PatientController {
   public @ResponseBody
   Patient addPatient(@RequestParam(name = "name") String name,
                      @RequestParam(name = "surname") String surname,
-                     @RequestParam(name = "patronymic", defaultValue = "", required = false) String patronymic,
-                     @RequestParam(name = "specialization", defaultValue = "", required = false) String specialization
+                     @RequestParam(name = "patronymic", defaultValue = "") String patronymic,
+                     @RequestParam(name = "phone", defaultValue = "") String phone
   ) {
     try{
-      return patientRepository.save(new Patient(name, surname, patronymic, specialization));
+      return patientRepository.save(new Patient(name, surname, patronymic, phone));
     } catch (Exception ignored){
       return null;
     }
@@ -102,8 +102,28 @@ public class PatientController {
       patient.ifPresent(patientRepository::delete);
       return patientRepository.findAll();
     } catch (DataIntegrityViolationException e) {
-      //todo>> consider how to handle this case
+      //todo>> consider how to handle this situation
       return patientRepository.findAll();
+    } catch (Exception ignored){
+      return null;
+    }
+  }
+  
+  @GetMapping(path = "/names")
+  public @ResponseBody
+  Iterable<String> getAllPatientsNames() {
+    try{
+      return patientRepository.getAllPatientsNames();
+    } catch (Exception ignored){
+      return null;
+    }
+  }
+  
+  @GetMapping(path = "/surnames")
+  public @ResponseBody
+  Iterable<String> getAllPatientsSurnames() {
+    try{
+      return patientRepository.getAllPatientsSurnames();
     } catch (Exception ignored){
       return null;
     }

@@ -74,7 +74,7 @@ public class Doctor {
   
   @Override
   public String toString(){
-    return "Doctor {" +
+    return "DoctorForm {" +
       "id: " + id +
       ", name: " + name +
       ", surname: " + surname +

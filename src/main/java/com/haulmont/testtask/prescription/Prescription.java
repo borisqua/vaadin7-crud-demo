@@ -9,12 +9,6 @@ import java.time.LocalDate;
 @Table(name = "prescriptions")
 public class Prescription {
   
-//  public enum Priority {
-//    UNSOLET,
-//    CITO,
-//    STATIM
-//  }
-  
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name="id")
@@ -29,7 +23,6 @@ public class Prescription {
   private Date creationDate;
   @Column(name="validitylength")
   private Integer validityLength;
-//  private Priority priority;
   @Column(name="priority")
   private String priority;
   
@@ -38,7 +31,7 @@ public class Prescription {
     this(description, patientId, doctorId, Date.valueOf(LocalDate.now()), 7, "UNSOLET");
   }
   public Prescription(String description, Long patientId, Long doctorId,
-                      Date creationDate, Integer validityLength, String/*Priority*/ priority) {
+                      Date creationDate, Integer validityLength, String priority) {
     this.description = description;
     this.patientId = patientId;
     this.doctorId = doctorId;
@@ -91,11 +84,11 @@ public class Prescription {
     this.validityLength = validityLength;
   }
   
-  public String/*Priority*/ getPriority() {
+  public String getPriority() {
     return priority;
   }
   
-  public void setPriority(String/*Priority*/ priority) {
+  public void setPriority(String priority) {
     this.priority = priority;
   }
   

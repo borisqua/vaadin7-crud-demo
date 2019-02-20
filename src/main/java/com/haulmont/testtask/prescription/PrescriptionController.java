@@ -66,7 +66,7 @@ public class PrescriptionController {
         validityLength = 7;
       }
       if (priority == null) {
-        priority = "UNSOLET";
+        priority = "Нормальный";
       }
       return prescriptionRepository.save(new Prescription(description, patientId, doctorId, creationDate, validityLength, priority));
     } catch (Exception ignored) {
@@ -126,7 +126,7 @@ public class PrescriptionController {
       prescription.ifPresent(prescriptionRepository::delete);
       return prescriptionRepository.findAll();
     } catch (DataIntegrityViolationException e) {
-      //todo>> consider how to handle this case
+      //todo>> consider how to handle this situation
       return prescriptionRepository.findAll();
     } catch (Exception ignored) {
       return null;
@@ -140,9 +140,8 @@ public class PrescriptionController {
     @RequestParam(name = "priority", required = false) String priority,
     @RequestParam(name = "pattern", required = false) String pattern
   ) {
-    LOGGER.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2:  filterPrescription -> {}", patientId);
+    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2:  filterPrescription -> {}", patientId);
     return prescriptionRepository.findByCustomCriteria(patientId, priority, pattern);
-//    return null;
   }
   
 }

@@ -2,7 +2,7 @@ package com.haulmont.testtask.doctor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +13,8 @@ import java.util.Optional;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-@Controller
+//@Controller
+@Service
 @RequestMapping(method = GET, path = "/doctors")
 public class DoctorController {
   
@@ -48,8 +49,8 @@ public class DoctorController {
   public @ResponseBody
   Doctor addDoctor(@RequestParam(name = "name") String name,
                    @RequestParam(name = "surname") String surname,
-                   @RequestParam(name = "patronymic", defaultValue = "", required = false) String patronymic,
-                   @RequestParam(name = "specialization", defaultValue = "", required = false) String specialization
+                   @RequestParam(name = "patronymic", defaultValue = "") String patronymic,
+                   @RequestParam(name = "specialization", defaultValue = "") String specialization
   ) {
     try{
       return doctorRepository.save(new Doctor(name, surname, patronymic, specialization));
@@ -102,8 +103,38 @@ public class DoctorController {
       doctor.ifPresent(doctorRepository::delete);
       return doctorRepository.findAll();
     } catch (DataIntegrityViolationException e) {
-      //todo>> consider how to handle this case
+      //todo>> consider how to handle this situation
       return doctorRepository.findAll();
+    } catch (Exception ignored){
+      return null;
+    }
+  }
+  
+  @GetMapping(path = "/names")
+  public @ResponseBody
+  Iterable<String> getAllDoctorsNames() {
+    try{
+      return doctorRepository.getAllDoctorsNames();
+    } catch (Exception ignored){
+      return null;
+    }
+  }
+  
+  @GetMapping(path = "/surnames")
+  public @ResponseBody
+  Iterable<String> getAllDoctorsSurnames() {
+    try{
+      return doctorRepository.getAllDoctorsSurnames();
+    } catch (Exception ignored){
+      return null;
+    }
+  }
+  
+  @GetMapping(path = "/specializations")
+  public @ResponseBody
+  Iterable<String> getAllDoctorsSpecs() {
+    try{
+      return doctorRepository.getAllDoctorsSpecs();
     } catch (Exception ignored){
       return null;
     }

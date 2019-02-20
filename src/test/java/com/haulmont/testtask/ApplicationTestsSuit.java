@@ -1,6 +1,6 @@
 package com.haulmont.testtask;
 
-import com.haulmont.testtask.doctor.DoctorRepositoryTest;
+import com.haulmont.testtask.doctor.DoctorFormRepositoryTest;
 import com.haulmont.testtask.patient.PatientRepositoryTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
   //  Class1Tests.class,
   //  Class2Tests.class,
   PatientRepositoryTest.class,
-  DoctorRepositoryTest.class
+  DoctorFormRepositoryTest.class
   //  ...
 })
 public class ApplicationTestsSuit {

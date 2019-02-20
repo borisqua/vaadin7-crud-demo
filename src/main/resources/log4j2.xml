@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--<Configuration status="ALL">-->
-<Configuration>
+<Configuration status="ALL">
+<!--<Configuration>-->
   
   <Properties>
     <Property name="basePath">logs</Property>
@@ -29,11 +29,11 @@
   
   <Loggers>
     
-    <Logger name="com.haulmont.testtask" level="trace" additivity="true">
+    <Logger name="com.haulmont.testtask" level="all" additivity="true">
       <AppenderRef ref="fileLogger"/>
     </Logger>
     
-    <Root level="trace" additivity="false">
+    <Root level="all" additivity="false">
       <AppenderRef ref="Console"/>
     </Root>
   

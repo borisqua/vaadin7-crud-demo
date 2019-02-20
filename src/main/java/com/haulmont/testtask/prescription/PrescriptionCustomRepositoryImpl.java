@@ -15,22 +15,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepository {
+public class PrescriptionCustomRepositoryImpl implements PrescriptionCustomRepository {
   
   @PersistenceContext
   private EntityManager entityManager;
   
   private static final Logger LOGGER = LogManager.getLogger();
   
-  public List<Prescription> findByCustomCriteria(Long patientId, String priority, String pattern) {
-    LOGGER.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2: Custom repository implementation: findByCriteria -> {}", patientId);
+  @SuppressWarnings("Duplicates")
+  public List<Prescription> findByCustomCriteria(Long patientId, String priority, String descriptionPattern) {
+    
+    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2: Custom repository implementation: findByCriteria -> {}", patientId);
+    
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Prescription> criteriaQuery = criteriaBuilder.createQuery(Prescription.class);
     
     Root<Prescription> prescription = criteriaQuery.from(Prescription.class);
 
-//    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2: Custom repository implementation: findByCriteria result -> {}", resultList);
-    
     List<Predicate> predicates = new ArrayList<>();
     if (patientId != null) {
       predicates.add(criteriaBuilder.equal(prescription.get("patientId"), patientId));
@@ -38,11 +39,11 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
     if (priority != null) {
       predicates.add(criteriaBuilder.equal(prescription.get("priority"), priority));
     }
-    if (pattern != null) {
-      predicates.add(criteriaBuilder.like(prescription.get("description"), "%" + pattern + "%"));
+    if (descriptionPattern != null) {
+      predicates.add(criteriaBuilder.like(
+        criteriaBuilder.trim(criteriaBuilder.lower(prescription.get("description"))),
+        "%" + descriptionPattern.trim().toLowerCase() + "%"));
     }
-//
-//    criteriaQuery.select(prescription).where(predicates.toArray(new Predicate[]{}));
     
     criteriaQuery.select(prescription).where(predicates.toArray(new Predicate[]{}));
     
