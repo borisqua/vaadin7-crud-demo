@@ -1,6 +1,7 @@
 package com.haulmont.testtask.ui;
 
 import com.haulmont.testtask.patient.PatientRepository;
+import com.haulmont.testtask.prescription.Priority;
 import com.haulmont.testtask.prescription.view.ViewAll;
 import com.haulmont.testtask.prescription.view.ViewAllRepository;
 import com.vaadin.annotations.Theme;
@@ -10,6 +11,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -23,14 +25,14 @@ import java.util.List;
 @Title("Haulmont test app")
 @Theme("valo")
 public class MainView extends UI {
-
+  
   private final PatientRepository patientRepository;
   private final ViewAllRepository allPrescriptions;
   
   private Grid grid = new Grid();
-  private ComboBox filterPatientComboBox = new ComboBox("Patient...");
-  private ComboBox filterPriority = new ComboBox("Priority...");
-  private TextField filterPrescription = new TextField("Search in prescription text...");
+  private ComboBox filterPatientComboBox = new ComboBox(/*"Patient..."*/);
+  private ComboBox filterPriorityComboBox = new ComboBox(/*"Priority..."*/);
+  private TextField filterPrescriptionTextField = new TextField(/*"Search in prescription text..."*/);
   
   @Autowired
   public MainView(PatientRepository patientRepository, ViewAllRepository allPrescriptions) {
@@ -42,27 +44,37 @@ public class MainView extends UI {
     
     final VerticalLayout layout = new VerticalLayout();
     
-    //live filter by name
-    filterPatientComboBox.setInputPrompt("Filter by patient's name...");
+    //live filter by patient name
+    filterPatientComboBox.setInputPrompt("Пациент");
+    filterPatientComboBox.setFilteringMode(FilteringMode.CONTAINS);
     filterPatientComboBox.setInvalidAllowed(false);
     filterPatientComboBox.setNullSelectionAllowed(true);
-    filterPatientComboBox.setInputPrompt("Start name entering...");
-    filterPatientComboBox.setContainerDataSource(new BeanItemContainer<>(String.class, patientRepository.getAllPatientsNames()));
-    filterPatientComboBox.addValueChangeListener(event -> // Java 8
-      grid.setContainerDataSource(new BeanItemContainer<>(
-        ViewAll.class, allPrescriptions.findByCustomCriteria((String) filterPatientComboBox.getValue(), null, null))));
-    filterPatientComboBox.getValue();
+    filterPatientComboBox.setContainerDataSource(new BeanItemContainer<>(String.class, patientRepository.getAllPatientsFullNames()));
+    filterPatientComboBox.addValueChangeListener(event -> updateList(filterPrescriptionTextField.getValue()));
     
     //button to purge the live filter text field
     Button clearFilterTextBtn = new Button(FontAwesome.TIMES);
     clearFilterTextBtn.setDescription("Clear the current filter");
     clearFilterTextBtn.addClickListener(e -> {
       filterPatientComboBox.clear();
-      updateList();
+      updateList(filterPrescriptionTextField.getValue());
+    });
+    
+    //live filter by priority name
+    filterPriorityComboBox.setInputPrompt("Приоритет");
+    filterPriorityComboBox.setFilteringMode(FilteringMode.CONTAINS);
+    filterPriorityComboBox.setInvalidAllowed(false);
+    filterPriorityComboBox.setNullSelectionAllowed(true);
+    filterPriorityComboBox.addItems(Priority.UNSOLET.toString(), Priority.CITO.toString(), Priority.STATIM.toString());
+    filterPriorityComboBox.addValueChangeListener(event -> updateList(filterPrescriptionTextField.getValue()));
+  
+    //prescription text filter by change
+    filterPrescriptionTextField.addTextChangeListener(event -> {
+      updateList(event.getText());
     });
     
     CssLayout filtering = new CssLayout();
-    filtering.addComponents(filterPatientComboBox, clearFilterTextBtn);
+    filtering.addComponents(filterPatientComboBox, clearFilterTextBtn, filterPriorityComboBox, filterPrescriptionTextField);
     filtering.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
     
     grid.setColumns(/*"id", */"doctor", "patient", "prescription", "priority", "expiration");
@@ -71,16 +83,20 @@ public class MainView extends UI {
     layout.addComponents(filtering, grid);
     layout.setExpandRatio(grid, 1);
     
-    updateList();
+    updateList(filterPrescriptionTextField.getValue());
     
     layout.setMargin(true);
     setContent(layout);
   }
   
-  private void updateList() {
+  private void updateList(String prescriptionText) {
     if (String.valueOf(filterPatientComboBox.getValue()).trim().length() > 0) {
-      grid.setContainerDataSource(
-        new BeanItemContainer<>(ViewAll.class, allPrescriptions.findByCustomCriteria((String) filterPatientComboBox.getValue(), null, null)));
+        grid.setContainerDataSource(
+          new BeanItemContainer<>(ViewAll.class, allPrescriptions.findByCustomCriteria(
+            (String) filterPatientComboBox.getValue(),   //patient name pattern
+            (String) filterPriorityComboBox.getValue(),  //priority name pattern
+            prescriptionText)
+          ));
     } else {
       grid.setContainerDataSource(
         new BeanItemContainer<>(ViewAll.class, (List<ViewAll>) allPrescriptions.findAll()));

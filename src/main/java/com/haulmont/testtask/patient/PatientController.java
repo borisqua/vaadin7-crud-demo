@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
+@SuppressWarnings({"unused"})
 @Controller
 @RequestMapping(method = GET, path = "/patients")
 public class PatientController {
@@ -29,6 +30,36 @@ public class PatientController {
   Iterable<Patient> showAllPatients() {
     try {
       return patientRepository.findAll();
+    } catch (Exception ignored){
+      return null;
+    }
+  }
+  
+  @GetMapping(path = "/names")
+  public @ResponseBody
+  Iterable<String> getAllPatientsNames() {
+    try{
+      return patientRepository.getAllPatientsNames();
+    } catch (Exception ignored){
+      return null;
+    }
+  }
+  
+  @GetMapping(path = "/surnames")
+  public @ResponseBody
+  Iterable<String> getAllPatientsSurnames() {
+    try{
+      return patientRepository.getAllPatientsSurnames();
+    } catch (Exception ignored){
+      return null;
+    }
+  }
+  
+  @RequestMapping(method = GET, path = "/fullnames")
+  public @ResponseBody
+  List<String> getAllFullNames(/*@RequestParam(name="pattern") String pattern*/){
+    try{
+      return patientRepository.getAllPatientsFullNames();
     } catch (Exception ignored){
       return null;
     }
@@ -104,26 +135,6 @@ public class PatientController {
     } catch (DataIntegrityViolationException e) {
       //todo>> consider how to handle this situation
       return patientRepository.findAll();
-    } catch (Exception ignored){
-      return null;
-    }
-  }
-  
-  @GetMapping(path = "/names")
-  public @ResponseBody
-  Iterable<String> getAllPatientsNames() {
-    try{
-      return patientRepository.getAllPatientsNames();
-    } catch (Exception ignored){
-      return null;
-    }
-  }
-  
-  @GetMapping(path = "/surnames")
-  public @ResponseBody
-  Iterable<String> getAllPatientsSurnames() {
-    try{
-      return patientRepository.getAllPatientsSurnames();
     } catch (Exception ignored){
       return null;
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="ALL">
-<!--<Configuration>-->
+  <!--<Configuration>-->
   
   <Properties>
     <Property name="basePath">logs</Property>
@@ -11,7 +11,7 @@
     <RollingFile name="fileLogger" fileName="${basePath}/app.log"
                  filePattern="${basePath}/app-info-%d{yyyy-MM-dd}.log">
       
-      <PatternLayout>
+      <PatternLayout charset="UTF-8">
         <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</Pattern>
       </PatternLayout>
       
@@ -22,7 +22,9 @@
     </RollingFile>
     
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %C{1}.%M(%F:%L) - %msg%n"/>
+      <PatternLayout
+        charset="UTF-8"
+        pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %C{1}.%M(%F:%L) - %msg%n"/>
     </Console>
   
   </Appenders>

@@ -23,9 +23,9 @@ public class ViewAllCustomRepositoryImpl implements ViewAllCustomRepository {
   private static final Logger LOGGER = LogManager.getLogger();
   
   @SuppressWarnings("Duplicates")
-  public List<ViewAll> findByCustomCriteria(String patient, String priority, String prescriptionPattern) {
+  public List<ViewAll> findByCustomCriteria(String patient, String priority, String pattern) {
     
-    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2: Custom repository implementation: findByCriteria -> {}", patient);
+    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2: Custom repository implementation: findByCriteria -> {}русский язык - кодировка utf8 - поциэнт", patient);
     
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<ViewAll> criteriaQuery = criteriaBuilder.createQuery(ViewAll.class);
@@ -35,15 +35,15 @@ public class ViewAllCustomRepositoryImpl implements ViewAllCustomRepository {
     List<Predicate> predicates = new ArrayList<>();
     if (patient != null) {
       predicates.add(criteriaBuilder.like(criteriaBuilder.trim(criteriaBuilder.lower(
-        prescription.get("patient"))), patient.toLowerCase()));
+        prescription.get("patient"))), "%"+patient.toLowerCase()+"%"));
     }
     if (priority != null) {
       predicates.add(criteriaBuilder.like(criteriaBuilder.trim(criteriaBuilder.lower(
-        prescription.get("priority"))), priority.toLowerCase()));
+        prescription.get("priority"))), "%"+priority.toLowerCase()+"%"));
     }
-    if (prescriptionPattern != null) {
+    if (pattern != null) {
       predicates.add(criteriaBuilder.like(criteriaBuilder.trim(criteriaBuilder.lower(
-        prescription.get("prescription"))), "%" + prescriptionPattern.toLowerCase() + "%"));
+        prescription.get("prescription"))), "%" + pattern.toLowerCase() + "%"));
     }
     
     criteriaQuery.select(prescription).where(predicates.toArray(new Predicate[]{}));
