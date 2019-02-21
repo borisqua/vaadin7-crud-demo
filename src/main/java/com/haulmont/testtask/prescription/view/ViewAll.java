@@ -56,12 +56,13 @@ public class ViewAll {
   
   @Override
   public String toString() {
-    return "All Prescription View {" +
-      "id: " + id +
-      ", doctor: " + doctor +
-      ", patient: " + patient +
-      ", prescription: " + prescription +
-      ", priority: " + priority +
-      ", expiration: " + expiration + "}";
+    return "Prescription from All Prescriptions View {\n " +
+      "\tid: " + id + ", \n" +
+      "\tdoctor: " + doctor + ", \n" +
+      "\tpatient: " + patient + ", \n" +
+      "\tprescription: " + prescription + ", \n" +
+      "\tpriority: " + priority + ", \n" +
+      "\texpiration: " + expiration + "\n" +
+      "}";
   }
 }

@@ -56,7 +56,7 @@ public class PrescriptionController {
                                @RequestParam(name = "doctorId") Long doctorId,
                                @RequestParam(name = "creationDate", required = false) Date creationDate,
                                @RequestParam(name = "validityLength", required = false) Integer validityLength,
-                               @RequestParam(name = "priority", required = false) String priority
+                               @RequestParam(name = "priority", required = false) String  priority
   ) {
     try {
       if (creationDate == null) {
@@ -66,7 +66,7 @@ public class PrescriptionController {
         validityLength = 7;
       }
       if (priority == null) {
-        priority = "Нормальный";
+        priority = Priority.UNSOLET.toString();
       }
       return prescriptionRepository.save(new Prescription(description, patientId, doctorId, creationDate, validityLength, priority));
     } catch (Exception ignored) {

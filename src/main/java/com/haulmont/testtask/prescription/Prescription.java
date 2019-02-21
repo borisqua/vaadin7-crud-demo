@@ -28,7 +28,7 @@ public class Prescription {
   
   public Prescription(){}
   public Prescription(String description, Long patientId, Long doctorId){
-    this(description, patientId, doctorId, Date.valueOf(LocalDate.now()), 7, "UNSOLET");
+    this(description, patientId, doctorId, Date.valueOf(LocalDate.now()), 7, "Нормальынй");
   }
   public Prescription(String description, Long patientId, Long doctorId,
                       Date creationDate, Integer validityLength, String priority) {
