@@ -1,1 +1,1 @@
-git add . && git commit -m "Initial commit w jpa" && git push origin master
+git add . && git commit -m "Initial commit jpa+vaadin" && git push origin master
