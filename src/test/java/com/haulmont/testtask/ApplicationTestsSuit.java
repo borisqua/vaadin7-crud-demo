@@ -1,7 +1,7 @@
 package com.haulmont.testtask;
 
-import com.haulmont.testtask.doctor.DoctorFormRepositoryTest;
-import com.haulmont.testtask.patient.PatientRepositoryTest;
+import com.haulmont.testtask.jpa.doctor.DoctorFormRepositoryTest;
+import com.haulmont.testtask.jpa.patient.PatientRepositoryTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

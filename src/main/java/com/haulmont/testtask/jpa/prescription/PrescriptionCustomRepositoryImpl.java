@@ -1,4 +1,4 @@
-package com.haulmont.testtask.prescription;
+package com.haulmont.testtask.jpa.prescription;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

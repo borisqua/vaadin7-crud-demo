@@ -1,4 +1,4 @@
-package com.haulmont.testtask.prescription;
+package com.haulmont.testtask.jpa.prescription;
 
 import java.util.List;
 

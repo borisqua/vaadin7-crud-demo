@@ -1,4 +1,4 @@
-package com.haulmont.testtask.patient;
+package com.haulmont.testtask.jpa.patient;
 
 import javax.persistence.*;
 

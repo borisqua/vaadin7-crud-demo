@@ -1,4 +1,4 @@
-package com.haulmont.testtask.doctor;
+package com.haulmont.testtask.jpa.doctor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

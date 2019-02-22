@@ -7,8 +7,8 @@
 //>> 5. vaadin grid
 //>> 6. vaadin filters
 //todo>> 7. column with buttons
-//todo>> 8. vaadin views
+//>> 8. vaadin views
 //todo>> 9. vaadin forms
-//todo>> 10. vaadin menu
+//>> 10. vaadin menu
 //todo>> 11. publish
 //todo>> 12. email to haulmont

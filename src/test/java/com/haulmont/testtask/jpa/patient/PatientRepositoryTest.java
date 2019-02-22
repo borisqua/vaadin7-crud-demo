@@ -1,4 +1,4 @@
-package com.haulmont.testtask.patient;
+package com.haulmont.testtask.jpa.patient;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
