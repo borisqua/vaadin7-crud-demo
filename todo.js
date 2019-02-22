@@ -1,6 +1,6 @@
-//>>1. package template app
+//>> 1. package template app
 //>> 2. acquire HSQLDB
-//>> 3. acquire Vaadin 7jk
+//>> 3. acquire Vaadin 7
 //>> 2. database and tables creating scripts
 //>> 3. Spring boot data jpa
 //>> 4. Spring boot controller
