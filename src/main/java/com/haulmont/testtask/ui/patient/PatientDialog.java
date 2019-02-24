@@ -6,7 +6,7 @@ import com.haulmont.testtask.ui.PersonForm;
 import com.vaadin.ui.UI;
 
 class PatientDialog extends PersonForm<Patient> {
-  PatientDialog(String caption, UI hostUI, Patient doctor, PatientRepository repository) {
-    super(caption, hostUI, doctor, repository);
+  PatientDialog(String caption, UI hostUI, Long patientId, PatientRepository repository) {
+    super(caption, hostUI, patientId, repository);
   }
 }
