@@ -5,30 +5,34 @@ import org.springframework.data.repository.CrudRepository;
 
 //@SpringView
 //@SuppressWarnings("unused")
+@SuppressWarnings("unused")
 public class ModalForm<T> extends Window {
   
   protected FormLayout form;
   private boolean isOpened = false;
   private UI hostUI;
+  private T entity;
   
-  public ModalForm(String caption, UI hostUI, T entity , CrudRepository<T, Long> repository) {
+  public ModalForm(String caption, UI hostUI, Long entityId, CrudRepository<T, Long> repository) {
     super(caption);
-  
+    
+    repository.findById(entityId).ifPresent(e -> this.entity = e);
+    
     center();
     setModal(true);
     
     this.hostUI = hostUI;
-  
+    
     VerticalLayout layout = new VerticalLayout();
     layout.setSizeFull();
     layout.setMargin(true);
     layout.setSpacing(true);
-  
+    
     this.form = new FormLayout();
     form.setSizeFull();
     form.setMargin(true);
     form.setSpacing(true);
-  
+    
     HorizontalLayout buttonsLayout = new HorizontalLayout();
     Button buttonOK = new Button("OK");
     Button buttonCancel = new Button("Cancel");
@@ -43,22 +47,22 @@ public class ModalForm<T> extends Window {
       repository.save(entity);
       close();
     });
-  
+    
     layout.addComponents(form, buttonsLayout);
     layout.setComponentAlignment(form, Alignment.TOP_CENTER);
     layout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_CENTER);
     
     addCloseListener(e -> this.isOpened = false);
-  
+    
     setContent(layout);
     layout.setSizeUndefined();
     
   }
   
-  public void open(){
-    if(!this.isOpened){
+  public void open() {
+    if (!this.isOpened) {
       hostUI.addWindow(this);
-    }else{
+    } else {
       hostUI.focus();
     }
     this.isOpened = true;

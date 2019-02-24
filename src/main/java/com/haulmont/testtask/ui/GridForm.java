@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 public class GridForm<T> extends VerticalLayout implements View {
   
   protected CrudRepository<T, Long> repository;
-  protected T entity;
   protected Grid grid = new Grid();
   protected final Button addButton = new Button("Add");
   protected final Button editButton = new Button("Edit");

@@ -5,5 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PrescriptionHumanizedRepository extends CrudRepository<PrescriptionHumanized, Long>, RepositoryWithSoftFilter<PrescriptionHumanized> {
+public interface PrescriptionHumanizedRepository extends
+  CrudRepository<PrescriptionHumanized, Long>, RepositoryWithSoftFilter<PrescriptionHumanized> {
 }

@@ -1,16 +1,15 @@
 package com.haulmont.testtask.ui.prescriptions;
 
 import com.haulmont.testtask.jpa.patient.PatientRepository;
-import com.haulmont.testtask.jpa.prescription.Prescription;
 import com.haulmont.testtask.jpa.prescription.PrescriptionRepository;
 import com.haulmont.testtask.jpa.prescription.Priority;
 import com.haulmont.testtask.jpa.prescription.view.PrescriptionHumanized;
 import com.haulmont.testtask.jpa.prescription.view.PrescriptionHumanizedRepository;
+import com.haulmont.testtask.ui.GridForm;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.GeneratedPropertyContainer;
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.combobox.FilteringMode;
@@ -24,57 +23,45 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings({"unused"})
 @SpringView
 @Title("Haulmont test app / Prescriptions")
 @Theme("valo")
-public class PrescriptionsView extends VerticalLayout implements View {
+public class PrescriptionsGrid extends GridForm<PrescriptionHumanized> {
   
-  private final PrescriptionRepository prescriptionRepository;
-  private final PrescriptionHumanizedRepository allPrescriptions;
+  private Long prescriptionId = -1L;
   
-  private Grid grid = new Grid();
+  private PrescriptionHumanizedRepository prescriptionHumanizedRepository;
   
   private final ComboBox filterPatientComboBox = new ComboBox();
   private final ComboBox filterPriorityComboBox = new ComboBox();
+  private final TextField filterPrescriptionTextField = new TextField();
   
-  private final TextField filterPrescriptionTextField = new TextField(/*"Pattern to search in prescriptions texts..."*/);
-  
-  private Prescription prescription;
-  private PrescriptionHumanized viewPrescription;
-  
-  public PrescriptionsView(PatientRepository patientRepository,
+  public PrescriptionsGrid(PatientRepository patientRepository,
                            PrescriptionRepository prescriptionRepository,
-                           PrescriptionHumanizedRepository allPrescriptions) {
+                           PrescriptionHumanizedRepository prescriptionHumanizedRepository) {
     
-    this.prescriptionRepository = prescriptionRepository;
-    this.allPrescriptions = allPrescriptions;
+    super(PrescriptionHumanized.class, "Рецепты", prescriptionHumanizedRepository);
     
-    Label label = new Label("Рецепты");
-    label.setStyleName(ValoTheme.LABEL_HUGE);
+    this.prescriptionHumanizedRepository = prescriptionHumanizedRepository;
     
-    grid.setSizeFull();
-    grid.setColumns(/*"id", */"doctor", "patient", "prescription", "priority", "expiration");
-    grid.setEditorEnabled(false);
-    
-    grid.setSelectionMode(Grid.SelectionMode.SINGLE);
     grid.addSelectionListener(event -> {
         if (event.getSelected().size() > 0) {
-          viewPrescription = (PrescriptionHumanized) event.getSelected().toArray()[0];
-          Notification.show(viewPrescription.toString(), Notification.Type.TRAY_NOTIFICATION);
+          prescriptionId = ((PrescriptionHumanized) event.getSelected().toArray()[0]).getId();
+          Notification.show(prescriptionId.toString(), Notification.Type.TRAY_NOTIFICATION);
         }
       }
     );
     
     
+    setColumns(/*"id", */"doctor", "patient", "prescription", "priority", "expiration");
+    setColumnCaptions(/*"id", */"Врач", "Пациент", "Рецепт", "Приоритет", "Срок действия");
+  
+    PrescriptionDialog prescriptionDialog = new PrescriptionDialog("Рецепт", UI.getCurrent(), prescriptionId, prescriptionRepository);
     Grid.HeaderRow filterRow = grid.appendHeaderRow();
     Grid.HeaderCell patientFilter = filterRow.getCell("patient");
     Grid.HeaderCell priorityFilter = filterRow.getCell("priority");
     Grid.HeaderCell prescriptionFilter = filterRow.getCell("prescription");
-    grid.getColumn("doctor").setHeaderCaption("Врач");
-    grid.getColumn("patient").setHeaderCaption("Пациент");
-    grid.getColumn("prescription").setHeaderCaption("Рецепт");
-    grid.getColumn("priority").setHeaderCaption("Приоритет");
-    grid.getColumn("expiration").setHeaderCaption("Срок действия");
     
     //live filter on patient name
     prepareComboBoxFilter(filterPatientComboBox, "Пациент...",
@@ -95,26 +82,13 @@ public class PrescriptionsView extends VerticalLayout implements View {
     controlsLayout.setSizeFull();
     setMargin(true);
     
-    PrescriptionForm patientForm = new PrescriptionForm("Врач", UI.getCurrent(), prescription, prescriptionRepository);
+    PrescriptionDialog patientForm = new PrescriptionDialog("Врач", UI.getCurrent(), prescriptionId, prescriptionRepository);
 
 //    final Button.ClickListener clickListener = e -> patientForm.open();
-    
-    Button addButton = new Button("Add");
 //    addButton.addClickListener(clickListener);
-    
-    Button editButton = new Button("Edit");
 //    editButton.addClickListener(clickListener);
-    
-    Button deleteButton = new Button("Delete");
-    
-    buttonsLayout.addComponents(addButton, editButton, deleteButton);
-    controlsLayout.addComponents(label, buttonsLayout);
-    addComponents(controlsLayout, grid);
-    setComponentAlignment(controlsLayout, Alignment.MIDDLE_CENTER);
-    setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
-    
-    controlsLayout.setComponentAlignment(label, Alignment.MIDDLE_LEFT);
-    controlsLayout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
+//    deleteButton.addClickListener(clickListener);
+  
   }
   
   private void prepareComboBoxFilter(ComboBox comboBox, String inputPrompt, List<String> strings, Grid.HeaderCell filter) {
@@ -156,7 +130,7 @@ public class PrescriptionsView extends VerticalLayout implements View {
     criteria.put("priority", (String) filterPriorityComboBox.getValue());
     criteria.put("prescription", prescriptionText);
     final BeanItemContainer<PrescriptionHumanized> container =
-      new BeanItemContainer<>(PrescriptionHumanized.class, allPrescriptions.findByCustomCriteria(PrescriptionHumanized.class, criteria));
+      new BeanItemContainer<>(PrescriptionHumanized.class, prescriptionHumanizedRepository.findByCustomCriteria(PrescriptionHumanized.class, criteria));
     final GeneratedPropertyContainer wrapContainer =
       new GeneratedPropertyContainer(container);//todo>> to add rendered content
     grid.setContainerDataSource(wrapContainer);

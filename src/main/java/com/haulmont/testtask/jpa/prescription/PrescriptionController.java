@@ -133,15 +133,4 @@ public class PrescriptionController {
     }
   }
   
-  @RequestMapping(method = GET, path = "/filter")
-  public @ResponseBody
-  Iterable<Prescription> filterPrescription(
-    @RequestParam(name = "patientId", required = false) Long patientId,
-    @RequestParam(name = "priority", required = false) String priority,
-    @RequestParam(name = "pattern", required = false) String pattern
-  ) {
-    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2:  filterPrescription -> {}", patientId);
-    return prescriptionRepository.findByCustomCriteria(patientId, priority, pattern);
-  }
-  
 }
