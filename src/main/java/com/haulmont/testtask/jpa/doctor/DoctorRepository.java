@@ -11,15 +11,20 @@ import java.util.List;
 public interface DoctorRepository extends CrudRepository<Doctor, Long> {
   
   List<Doctor> findByName(String text);
+  
   List<Doctor> findBySurname(String text);
+  
   List<Doctor> findBySpecialization(String text);
+  
+  @Query(value = "SELECT TRIM(BOTH FROM TRIM(BOTH FROM TRIM(BOTH FROM name)+' '+patronymic)+' '+ surname) as fullName FROM doctors", nativeQuery = true)
+  List<String> getAllPatientsFullNames(/*@Param("pattern") String pattern*/);
   
   @Query(value = "select distinct name from doctors;", nativeQuery = true)
   List<String> getAllDoctorsNames();
   
   @Query(value = "select distinct surname from doctors;", nativeQuery = true)
   List<String> getAllDoctorsSurnames();
-
+  
   @Query(value = "select distinct specialization from doctors;", nativeQuery = true)
   List<String> getAllDoctorsSpecs();
   

@@ -15,7 +15,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
 
-@SuppressWarnings({"unused", "FieldCanBeLocal"})
 @SpringView
 @Title("Haulmont test app / Patients")
 @Theme("valo")
@@ -25,16 +24,12 @@ public class PatientsView extends VerticalLayout implements View {
   
   private Grid grid = new Grid();
   
-  private final Button addButton = new Button("Add");
-  private final Button editButton = new Button("Edit");
-  private final Button deleteButton = new Button("Delete");
-  
   private Patient patient;
   
   public PatientsView(PatientRepository patientRepository) {
     
     this.patientRepository = patientRepository;
-    
+  
     Label label = new Label("Пациенты");
     label.setStyleName(ValoTheme.LABEL_HUGE);
     
@@ -51,20 +46,42 @@ public class PatientsView extends VerticalLayout implements View {
       }
     );
     
-    Grid.Column surnameColumn = grid.getColumn("surname").setHeaderCaption("Фамилия");
-    Grid.Column nameColumn = grid.getColumn("name").setHeaderCaption("Имя");
-    Grid.Column patronymicColumn = grid.getColumn("patronymic").setHeaderCaption("Отчество");
-    Grid.Column phoneColumn = grid.getColumn("phone").setHeaderCaption("Телефон");
+    grid.getColumn("surname").setHeaderCaption("Фамилия");
+    grid.getColumn("name").setHeaderCaption("Имя");
+    grid.getColumn("patronymic").setHeaderCaption("Отчество");
+    grid.getColumn("phone").setHeaderCaption("Телефон");
     
     setWidth(100, Sizeable.Unit.PERCENTAGE);
     
     updateList();
-    
+  
+    HorizontalLayout buttonsLayout = new HorizontalLayout();
+    buttonsLayout.setMargin(true);
+    HorizontalLayout controlsLayout = new HorizontalLayout();
+    controlsLayout.setSizeFull();
     setMargin(true);
-    addComponents(label, grid);
-    setComponentAlignment(label, Alignment.MIDDLE_CENTER);
-    setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
     
+    PatientForm  patientForm = new PatientForm("Врач", UI.getCurrent(), patient, patientRepository);
+  
+    final Button.ClickListener clickListener = e -> patientForm.open();
+  
+    Button addButton = new Button("Add");
+    addButton.addClickListener(clickListener);
+  
+    Button editButton = new Button("Edit");
+    editButton.addClickListener(clickListener);
+  
+    Button deleteButton = new Button("Delete");
+  
+    buttonsLayout.addComponents(addButton, editButton, deleteButton);
+    controlsLayout.addComponents(label, buttonsLayout);
+    addComponents(controlsLayout, grid);
+    setComponentAlignment(controlsLayout, Alignment.MIDDLE_CENTER);
+    setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
+  
+    controlsLayout.setComponentAlignment(label, Alignment.MIDDLE_LEFT);
+    controlsLayout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
+  
   }
   
   @Override

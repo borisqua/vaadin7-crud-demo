@@ -15,7 +15,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SuppressWarnings("unused")
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class DoctorFormRepositoryTest {
+public class DoctorDialogRepositoryTest {
   
   @Autowired
   private DoctorRepository doctorRepository;

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -16,19 +18,19 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @SuppressWarnings({"unused"})
 @Controller
 @RequestMapping(method = GET, path = "/prescriptions/view")
-public class ViewAllController {
+public class PrescriptionHumanizedController {
   
-  private final ViewAllRepository prescriptionRepository;
+  private final PrescriptionHumanizedRepository prescriptionRepository;
   private static final Logger LOGGER = LogManager.getLogger();
   
   @Autowired
-  public ViewAllController(ViewAllRepository prescriptionRepository) {
+  public PrescriptionHumanizedController(PrescriptionHumanizedRepository prescriptionRepository) {
     this.prescriptionRepository = prescriptionRepository;
   }
   
   @GetMapping("/all")
   public @ResponseBody
-  Iterable<ViewAll> showAllPrescriptions() {
+  Iterable<PrescriptionHumanized> showAllPrescriptions() {
     try {
       return prescriptionRepository.findAll();
     } catch (Exception ignored) {
@@ -38,7 +40,7 @@ public class ViewAllController {
   
   @RequestMapping(method = GET, path = "/get")
   public @ResponseBody
-  Optional<ViewAll> getPrescription(@RequestParam(name = "id") Long id) {
+  Optional<PrescriptionHumanized> getPrescription(@RequestParam(name = "id") Long id) {
     try {
       return prescriptionRepository.findById(id);
     } catch (Exception ignored) {
@@ -48,14 +50,20 @@ public class ViewAllController {
   
   @RequestMapping(method = GET, path = "/filter")
   public @ResponseBody
-  Iterable<ViewAll> filterPrescription(
+  Iterable<PrescriptionHumanized> filterPrescription(
     @RequestParam(name = "patient", required = false) String patient,
     @RequestParam(name = "priority", required = false) String priority,
     @RequestParam(name = "pattern", required = false) String pattern
   ) {
+    
+    Map<String, String> criteria = new HashMap<>();
+    criteria.put("patient", patient);
+    criteria.put("priority", priority);
+    criteria.put("pattern", pattern);
+    
     LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2:  filterPrescription -> {}", patient);
-    return prescriptionRepository.findByCustomCriteria(patient, priority, pattern);
-//    return null;
+    
+    return prescriptionRepository.findByCustomCriteria(PrescriptionHumanized.class, criteria);
   }
   
 }

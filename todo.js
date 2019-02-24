@@ -6,9 +6,13 @@
 //>> 4. Spring boot controller
 //>> 5. vaadin grid
 //>> 6. vaadin filters
-//todo>> 7. column with buttons
+//>> 7. add, edit, delete buttons, inside column with buttons
 //>> 8. vaadin views
-//todo>> 9. vaadin forms
-//>> 10. vaadin menu
-//todo>> 11. publish
-//todo>> 12. email to haulmont
+//>> 9. vaadin menu
+//todo>> 10. vaadin forms
+//todo>> 10.1 doctor form
+//todo>> 10.2 patient form
+//todo>> 10.3 prescription form
+//todo>> 11. statistics chart to the Start page
+//todo>> 12. publish
+//todo>> 13. email to haulmont

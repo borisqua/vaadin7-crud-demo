@@ -10,7 +10,7 @@ import java.sql.Date;
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Entity
 @Table(name = "all_prescriptions")
-public class ViewAll {
+public class PrescriptionHumanized {
   
   @Id
   @NotNull
@@ -27,7 +27,7 @@ public class ViewAll {
   @Column(name = "expiration")
   private Date expiration;
   
-  public ViewAll() {
+  public PrescriptionHumanized() {
   }
   
   public Long getId() {
