@@ -56,7 +56,7 @@ public class PrescriptionHumanized {
   
   @Override
   public String toString() {
-    return "Prescription from All Prescriptions View {\n " +
+    return "PrescriptionHumanized{\n " +
       "\tid: " + id + ", \n" +
       "\tdoctor: " + doctor + ", \n" +
       "\tpatient: " + patient + ", \n" +

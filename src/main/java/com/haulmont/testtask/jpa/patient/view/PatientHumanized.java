@@ -37,7 +37,7 @@ public class PatientHumanized {
   
   @Override
   public String toString() {
-    return "Doctor {\n " +
+    return "PatientHumanized {\n " +
       "\tid: " + id + ", \n" +
       "\tfullname: " + fullname + ", \n" +
       "\tphone: " + phone + ", \n" +

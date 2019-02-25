@@ -18,13 +18,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @SuppressWarnings({"unused"})
 @Controller
 @RequestMapping(method = GET, path = "/doctors/view")
-public class DoctorHumanizedContrller {
+public class DoctorHumanizedController {
   
   private final DoctorHumanizedRepository doctorRepository;
   private static final Logger LOGGER = LogManager.getLogger();
   
   @Autowired
-  public DoctorHumanizedContrller(DoctorHumanizedRepository doctorRepository) {
+  public DoctorHumanizedController(DoctorHumanizedRepository doctorRepository) {
     this.doctorRepository = doctorRepository;
   }
   

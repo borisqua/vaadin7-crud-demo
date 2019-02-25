@@ -27,27 +27,27 @@ import java.util.stream.Stream;
 @SpringView
 @Title("Haulmont test app / Prescriptions")
 @Theme("valo")
-public class PrescriptionsView extends VerticalLayout implements View {
+public class PrescriptionsGrid extends VerticalLayout implements View {
   
-  private final PrescriptionRepository prescriptionRepository;
-  private final PrescriptionHumanizedRepository allPrescriptions;
+  private Long prescriptionId = -1L;
+  private final PrescriptionHumanizedRepository prescriptionHumanizedRepository;
   
   private Grid grid = new Grid();
   
   private final ComboBox filterPatientComboBox = new ComboBox();
   private final ComboBox filterPriorityComboBox = new ComboBox();
-  
   private final TextField filterPrescriptionTextField = new TextField(/*"Pattern to search in prescriptions texts..."*/);
+  private final Button addButton = new Button("Add");
+  private final Button editButton = new Button("Edit");
+  private final Button deleteButton = new Button("Delete");
   
   private Prescription prescription;
-  private PrescriptionHumanized viewPrescription;
   
-  public PrescriptionsView(PatientRepository patientRepository,
+  public PrescriptionsGrid(PatientRepository patientRepository,
                            PrescriptionRepository prescriptionRepository,
-                           PrescriptionHumanizedRepository allPrescriptions) {
+                           PrescriptionHumanizedRepository prescriptionHumanizedRepository) {
     
-    this.prescriptionRepository = prescriptionRepository;
-    this.allPrescriptions = allPrescriptions;
+    this.prescriptionHumanizedRepository = prescriptionHumanizedRepository;
     
     Label label = new Label("Рецепты");
     label.setStyleName(ValoTheme.LABEL_HUGE);
@@ -59,8 +59,14 @@ public class PrescriptionsView extends VerticalLayout implements View {
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
     grid.addSelectionListener(event -> {
         if (event.getSelected().size() > 0) {
-          viewPrescription = (PrescriptionHumanized) event.getSelected().toArray()[0];
-          Notification.show(viewPrescription.toString(), Notification.Type.TRAY_NOTIFICATION);
+          prescriptionId = ((PrescriptionHumanized) event.getSelected().toArray()[0]).getId();
+          prescriptionRepository.findById(prescriptionId).ifPresent(e->prescription =e);
+          Notification.show(prescription.toString(), Notification.Type.TRAY_NOTIFICATION);
+          editButton.setEnabled(true);
+          deleteButton.setEnabled(true);
+        } else {
+          editButton.setEnabled(false);
+          deleteButton.setEnabled(false);
         }
       }
     );
@@ -95,17 +101,16 @@ public class PrescriptionsView extends VerticalLayout implements View {
     controlsLayout.setSizeFull();
     setMargin(true);
     
-    PrescriptionForm patientForm = new PrescriptionForm("Врач", UI.getCurrent(), prescription, prescriptionRepository);
-
-//    final Button.ClickListener clickListener = e -> patientForm.open();
+    PrescriptionDialog prescriptionDialog = new PrescriptionDialog("Врач", UI.getCurrent(), prescriptionId, prescriptionRepository);
     
-    Button addButton = new Button("Add");
-//    addButton.addClickListener(clickListener);
     
-    Button editButton = new Button("Edit");
-//    editButton.addClickListener(clickListener);
+//    Optional<Doctor> doctor = doctorRepository.findById(id);
+//    doctor.ifPresent(doctorRepository::delete);
     
-    Button deleteButton = new Button("Delete");
+    addButton.addClickListener(e->prescriptionDialog.open(null));
+    editButton.addClickListener(e -> prescriptionDialog.open(prescription));
+    deleteButton.addClickListener(e->{});
+    
     
     buttonsLayout.addComponents(addButton, editButton, deleteButton);
     controlsLayout.addComponents(label, buttonsLayout);
@@ -151,12 +156,14 @@ public class PrescriptionsView extends VerticalLayout implements View {
   
   private void updateList(String prescriptionText) {
     grid.deselectAll();
+    editButton.setEnabled(false);
+    deleteButton.setEnabled(false);
     Map<String, String> criteria = new HashMap<>();
     criteria.put("patient", (String) filterPatientComboBox.getValue());
     criteria.put("priority", (String) filterPriorityComboBox.getValue());
     criteria.put("prescription", prescriptionText);
     final BeanItemContainer<PrescriptionHumanized> container =
-      new BeanItemContainer<>(PrescriptionHumanized.class, allPrescriptions.findByCustomCriteria(PrescriptionHumanized.class, criteria));
+      new BeanItemContainer<>(PrescriptionHumanized.class, prescriptionHumanizedRepository.findByCustomCriteria(PrescriptionHumanized.class, criteria));
     final GeneratedPropertyContainer wrapContainer =
       new GeneratedPropertyContainer(container);//todo>> to add rendered content
     grid.setContainerDataSource(wrapContainer);

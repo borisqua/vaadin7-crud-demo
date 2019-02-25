@@ -74,8 +74,8 @@ public class Patient {
     return "Patient {" +
       "id: " + id +
       ", name: " + name +
-      ", surname: " + surname +
       ", patronymic: " + patronymic +
+      ", surname: " + surname +
       ", phone: " + phone + "}";
   }
 }

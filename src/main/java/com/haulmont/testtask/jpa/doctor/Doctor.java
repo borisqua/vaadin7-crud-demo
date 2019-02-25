@@ -74,11 +74,11 @@ public class Doctor {
   
   @Override
   public String toString(){
-    return "DoctorForm {" +
+    return "Doctor {" +
       "id: " + id +
       ", name: " + name +
-      ", surname: " + surname +
       ", patronymic: " + patronymic +
+      ", surname: " + surname +
       ", specialization: " + specialization + "}";
   }
 }

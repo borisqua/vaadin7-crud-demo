@@ -6,7 +6,7 @@ import com.haulmont.testtask.jpa.prescription.PrescriptionRepository;
 import com.haulmont.testtask.jpa.prescription.view.PrescriptionHumanizedRepository;
 import com.haulmont.testtask.ui.doctor.DoctorsGrid;
 import com.haulmont.testtask.ui.patient.PatientsGrid;
-import com.haulmont.testtask.ui.prescriptions.PrescriptionsView;
+import com.haulmont.testtask.ui.prescriptions.PrescriptionsGrid;
 import com.haulmont.testtask.ui.startistics.StartView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -74,7 +74,7 @@ public class HaulmontTestTaskUI extends UI {
     
     navigator = new Navigator(this, content);
     navigator.addView(START, new StartView());
-    navigator.addView(PRESCRIPTIONS, new PrescriptionsView(patientRepository, prescriptionRepository, allPrescriptions));
+    navigator.addView(PRESCRIPTIONS, new PrescriptionsGrid(patientRepository, prescriptionRepository, allPrescriptions));
     navigator.addView(DOCTORS, new DoctorsGrid(doctorRepository));
     navigator.addView(PATIENTS, new PatientsGrid(patientRepository));
   

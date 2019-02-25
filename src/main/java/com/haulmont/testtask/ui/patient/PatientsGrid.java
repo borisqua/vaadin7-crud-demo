@@ -15,12 +15,21 @@ import com.vaadin.ui.UI;
 @Theme("valo")
 public class PatientsGrid extends GridForm<Patient> {
   
+  private Long patientId = -1L;
+  private Patient patient;
+  
   public PatientsGrid(PatientRepository patientRepository) {
-    super(Patient.class, "Patients", patientRepository);
+    super(Patient.class, "Пациенты", patientRepository);
     grid.addSelectionListener(event -> {
         if (event.getSelected().size() > 0) {
-          entity = (Patient) event.getSelected().toArray()[0];
-          Notification.show(entity.toString(), Notification.Type.TRAY_NOTIFICATION);
+          patient = (Patient) event.getSelected().toArray()[0];
+          patientId = patient.getId();
+          Notification.show(patient.toString(), Notification.Type.TRAY_NOTIFICATION);
+          editButton.setEnabled(true);
+          deleteButton.setEnabled(true);
+        } else {
+          editButton.setEnabled(false);
+          deleteButton.setEnabled(false);
         }
       }
     );
@@ -28,14 +37,14 @@ public class PatientsGrid extends GridForm<Patient> {
     setColumns(/*"id", */"surname", "name", "patronymic", "phone");
     setColumnCaptions(/*"id", */"Фамилия", "Имя", "Отчество", "Телефон");
     
-    PatientDialog patientDialog = new PatientDialog("Пациент", UI.getCurrent(), entity, patientRepository);
-  
+    PatientDialog patientDialog = new PatientDialog("Пациент", UI.getCurrent(), patientId, patientRepository);
+    
     final Button.ClickListener clickListener = e -> patientDialog.open();
-  
+    
     addButton.addClickListener(clickListener);
     editButton.addClickListener(clickListener);
     deleteButton.addClickListener(clickListener);
-  
+    
   }
   
 }
