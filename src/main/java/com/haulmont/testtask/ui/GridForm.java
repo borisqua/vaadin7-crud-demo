@@ -70,7 +70,6 @@ public class GridForm<T> extends VerticalLayout implements View {
   
   @Override
   public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-//    Notification.show("Данные обновлены.", Notification.Type.TRAY_NOTIFICATION);
   }
   
   private void updateList(Class<T> clazz) {

@@ -10,6 +10,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 
+@SuppressWarnings("unused")
 @SpringView
 @Title("Haulmont test app / Patients")
 @Theme("valo")
@@ -37,7 +38,7 @@ public class PatientsGrid extends GridForm<Patient> {
     setColumns(/*"id", */"surname", "name", "patronymic", "phone");
     setColumnCaptions(/*"id", */"Фамилия", "Имя", "Отчество", "Телефон");
     
-    PatientDialog patientDialog = new PatientDialog("Пациент", UI.getCurrent(), patientId, patientRepository);
+    PatientDialog patientDialog = new PatientDialog("Пациент", UI.getCurrent(), patient, patientRepository);
     
     final Button.ClickListener clickListener = e -> patientDialog.open();
     

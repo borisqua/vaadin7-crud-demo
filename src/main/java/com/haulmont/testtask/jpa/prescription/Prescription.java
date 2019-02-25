@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
 
-@SuppressWarnings({"unused", "FieldCanBeLocal", "WeakerAccess"})
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Entity
 @Table(name = "prescriptions")
 public class Prescription {
@@ -38,6 +38,9 @@ public class Prescription {
     this.creationDate = creationDate;
     this.validityLength = validityLength;
     this.priority = priority;
+  }
+  
+  public Prescription(String prescriptionText, Long doctorId, Long patientId, java.util.Date issueDate, Integer validityLength, String priority) {
   }
   
   public Long getId() {

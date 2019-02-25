@@ -1,5 +1,7 @@
 package com.haulmont.testtask.jpa.patient;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class PatientController {
   
   private final PatientRepository patientRepository;
+  private static final Logger LOGGER = LogManager.getLogger();
   
   @Autowired
   public PatientController(PatientRepository patientRepository) {
@@ -132,11 +135,12 @@ public class PatientController {
       Optional<Patient> patient = patientRepository.findById(id);
       patient.ifPresent(patientRepository::delete);
       return patientRepository.findAll();
-    } catch (DataIntegrityViolationException e) {
-      //todo>> consider how to handle this situation
+    } catch (DataIntegrityViolationException dataIntegrityError) {
+      LOGGER.info("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE DELETING PATIENT ENTITY -> {}", dataIntegrityError);
       return patientRepository.findAll();
-    } catch (Exception ignored){
-      return null;
+    } catch (Exception unknown) {
+      LOGGER.info("HaulmontLOG4J2:  UNKNOWN ERROR WHILE DELETING PATIENT ENTITY -> {}", unknown);
+      return patientRepository.findAll();
     }
   }
   

@@ -25,7 +25,7 @@ public class PrescriptionCustomRepositoryImpl implements PrescriptionCustomRepos
   @SuppressWarnings("Duplicates")
   public List<Prescription> findByCustomCriteria(Long patientId, String priority, String descriptionPattern) {
     
-    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2: Custom repository implementation: findByCriteria -> {}", patientId);
+    LOGGER.info("HaulmontLOG4J2: Custom repository implementation: findByCriteria -> {}", patientId);
     
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Prescription> criteriaQuery = criteriaBuilder.createQuery(Prescription.class);

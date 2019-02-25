@@ -125,11 +125,12 @@ public class PrescriptionController {
       Optional<Prescription> prescription = prescriptionRepository.findById(id);
       prescription.ifPresent(prescriptionRepository::delete);
       return prescriptionRepository.findAll();
-    } catch (DataIntegrityViolationException e) {
-      //todo>> consider how to handle this situation
+    } catch (DataIntegrityViolationException dataIntegrityError) {
+      LOGGER.info("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE DELETING PRESCRIPTION ENTITY -> {}", dataIntegrityError);
       return prescriptionRepository.findAll();
-    } catch (Exception ignored) {
-      return null;
+    } catch (Exception unknown) {
+      LOGGER.info("HaulmontLOG4J2:  UNKNOWN ERROR WHILE DELETING PRESCRIPTION ENTITY -> {}", unknown);
+      return prescriptionRepository.findAll();
     }
   }
   
@@ -140,7 +141,7 @@ public class PrescriptionController {
     @RequestParam(name = "priority", required = false) String priority,
     @RequestParam(name = "pattern", required = false) String pattern
   ) {
-    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2:  filterPrescription -> {}", patientId);
+    LOGGER.info("HaulmontLOG4J2:  filtered -> {}", patientId);
     return prescriptionRepository.findByCustomCriteria(patientId, priority, pattern);
   }
   

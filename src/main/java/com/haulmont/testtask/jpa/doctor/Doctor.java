@@ -2,7 +2,7 @@ package com.haulmont.testtask.jpa.doctor;
 
 import javax.persistence.*;
 
-@SuppressWarnings({"WeakerAccess","unused"})
+@SuppressWarnings({"unused"})
 @Entity
 @Table(name="doctors")
 public class Doctor {
@@ -74,11 +74,6 @@ public class Doctor {
   
   @Override
   public String toString(){
-    return "Doctor {" +
-      "id: " + id +
-      ", name: " + name +
-      ", patronymic: " + patronymic +
-      ", surname: " + surname +
-      ", specialization: " + specialization + "}";
+    return ((name.trim() + " " + patronymic).trim() + " " + surname).trim();
   }
 }

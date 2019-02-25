@@ -12,7 +12,7 @@ public class Application {
 	
 	public static void main(String[] args) {
 		
-		LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2: Application starts");
+		LOGGER.info("HaulmontLOG4J2: Application started...");
 		SpringApplication.run(Application.class, args);
 	}
 

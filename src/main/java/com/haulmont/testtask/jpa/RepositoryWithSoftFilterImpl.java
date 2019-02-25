@@ -26,7 +26,7 @@ public class RepositoryWithSoftFilterImpl<T> implements RepositoryWithSoftFilter
   @Override
   public List<T> findByCustomCriteria(Class<T> clazz, Map<String, String> criteria) {
     
-    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2: RepositoryWithSoftFilterImpl<T>");
+    LOGGER.info("HaulmontLOG4J2: RepositoryWithSoftFilterImpl<T>");
     
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(clazz);

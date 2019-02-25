@@ -6,10 +6,10 @@ public class ModalDialog extends Window {
   
   protected FormLayout form;
   protected boolean isOpened = false;
-  protected UI hostUI;
+  private UI hostUI;
+  
   protected Button buttonOK = new Button("OK");
   protected Button buttonCancel = new Button("Cancel");
-  protected Boolean OK = false;
   
   public ModalDialog(String caption, UI hostUI) {
     
@@ -24,9 +24,11 @@ public class ModalDialog extends Window {
     layout.setSizeFull();
     layout.setMargin(true);
     layout.setSpacing(true);
+//    setWidth("50%");
     
     this.form = new FormLayout();
     form.setSizeFull();
+    form.setWidth("100%");
     form.setMargin(true);
     form.setSpacing(true);
     
@@ -39,14 +41,6 @@ public class ModalDialog extends Window {
     buttonsLayout.setSizeFull();
     buttonsLayout.setComponentAlignment(buttonOK, Alignment.MIDDLE_CENTER);
     buttonsLayout.setComponentAlignment(buttonCancel, Alignment.MIDDLE_CENTER);
-    buttonCancel.addClickListener(e -> {
-      OK = false;
-      close();
-    });
-    buttonOK.addClickListener(e -> {
-      OK = true;
-      close();
-    });
     
     layout.addComponents(form, buttonsLayout);
     layout.setComponentAlignment(form, Alignment.TOP_CENTER);
@@ -56,6 +50,14 @@ public class ModalDialog extends Window {
     
     setContent(layout);
     layout.setSizeUndefined();
+  
+//    buttonOK.addClickListener(event->{
+//      this.isOpened = false;
+//    });
+  
+//    buttonCancel.addClickListener(event->{
+//      this.isOpened = false;
+//    });
     
   }
   

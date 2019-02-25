@@ -2,16 +2,16 @@ package com.haulmont.testtask.ui;
 
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
-import org.springframework.data.repository.CrudRepository;
 
-public class PersonForm<T> extends ModalForm<T>{
-  public PersonForm(String caption, UI hostUI, Long entityId, CrudRepository<T, Long> repository) {
+public class PersonForm extends ModalDialog{
+  
+  protected final TextField surname = new TextField("Фамилия");
+  protected final TextField name = new TextField("Имя");
+  protected final TextField patronymic = new TextField("Отчество");
+  
+  public PersonForm(String caption, UI hostUI) {
     
-    super(caption, hostUI, entityId, repository);
-    
-    final TextField surname = new TextField("Surname");
-    final TextField name = new TextField("Name");
-    final TextField patronymic = new TextField("Patronymic");
+    super(caption, hostUI);
     
     form.addComponents(surname, name, patronymic);
     

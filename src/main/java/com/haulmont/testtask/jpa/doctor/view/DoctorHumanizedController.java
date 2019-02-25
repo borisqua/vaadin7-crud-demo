@@ -57,7 +57,7 @@ public class DoctorHumanizedController {
     Map<String, String> criteria = new HashMap<>();
     criteria.put("fullname", pattern);
     
-    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2:  filter doctors by pattern -> {}", pattern);
+    LOGGER.info("HaulmontLOG4J2:  filter doctors by pattern -> {}", pattern);
     
     return doctorRepository.findByCustomCriteria(DoctorHumanized.class, criteria);
   }

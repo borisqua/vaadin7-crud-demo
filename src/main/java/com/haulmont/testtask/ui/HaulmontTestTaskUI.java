@@ -35,18 +35,18 @@ public class HaulmontTestTaskUI extends UI {
   private final DoctorRepository doctorRepository;
   private final PatientRepository patientRepository;
   private final PrescriptionRepository prescriptionRepository;
-  private final PrescriptionHumanizedRepository allPrescriptions;
+  private final PrescriptionHumanizedRepository prescriptionHumanizedRepository;
   
   @Autowired
   public HaulmontTestTaskUI(DoctorRepository doctorRepository,
                             PatientRepository patientRepository,
                             PrescriptionRepository prescriptionRepository,
-                            PrescriptionHumanizedRepository allPrescriptions
+                            PrescriptionHumanizedRepository prescriptionHumanizedRepository
                             ) {
     this.doctorRepository = doctorRepository;
     this.patientRepository = patientRepository;
     this.prescriptionRepository= prescriptionRepository;
-    this.allPrescriptions = allPrescriptions;
+    this.prescriptionHumanizedRepository = prescriptionHumanizedRepository;
   }
   
   @Override
@@ -74,7 +74,7 @@ public class HaulmontTestTaskUI extends UI {
     
     navigator = new Navigator(this, content);
     navigator.addView(START, new StartView());
-    navigator.addView(PRESCRIPTIONS, new PrescriptionsGrid(patientRepository, prescriptionRepository, allPrescriptions));
+    navigator.addView(PRESCRIPTIONS, new PrescriptionsGrid(patientRepository, doctorRepository, prescriptionRepository, prescriptionHumanizedRepository));
     navigator.addView(DOCTORS, new DoctorsGrid(doctorRepository));
     navigator.addView(PATIENTS, new PatientsGrid(patientRepository));
   

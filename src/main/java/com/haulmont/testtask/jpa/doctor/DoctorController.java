@@ -1,5 +1,7 @@
 package com.haulmont.testtask.jpa.doctor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class DoctorController {
   
   private final DoctorRepository doctorRepository;
+  private static final Logger LOGGER = LogManager.getLogger();
   
   @Autowired
   public DoctorController(DoctorRepository doctorRepository) {
@@ -54,7 +57,11 @@ public class DoctorController {
   ) {
     try{
       return doctorRepository.save(new Doctor(name, surname, patronymic, specialization));
-    } catch (Exception e){
+    } catch (DataIntegrityViolationException dataIntegrityError) {
+      LOGGER.info("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE ADDING NEW ENTITY-> {}", dataIntegrityError);
+      return  null;
+    } catch (Exception unknown){
+      LOGGER.info("HaulmontLOG4J2:  UNKNOWN ERROR WHILE ADDING NEW ENTITY -> {}", unknown);
       return  null;
     }
   }
@@ -102,11 +109,12 @@ public class DoctorController {
       Optional<Doctor> doctor = doctorRepository.findById(id);
       doctor.ifPresent(doctorRepository::delete);
       return doctorRepository.findAll();
-    } catch (DataIntegrityViolationException e) {
-      //todo>> consider how to handle this situation
+    } catch (DataIntegrityViolationException dataIntegrityError) {
+      LOGGER.info("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE DELETING DOCTOR ENTITY -> {}", dataIntegrityError);
       return doctorRepository.findAll();
-    } catch (Exception ignored){
-      return null;
+    } catch (Exception unknown) {
+      LOGGER.info("HaulmontLOG4J2:  UNKNOWN ERROR WHILE DELETING DOCTOR ENTITY -> {}", unknown);
+      return doctorRepository.findAll();
     }
   }
   

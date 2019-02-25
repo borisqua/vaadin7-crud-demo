@@ -36,7 +36,7 @@ public class DoctorsGrid extends GridForm<Doctor> {
     setColumns(/*"id", */"surname", "name", "patronymic", "specialization");
     setColumnCaptions(/*"id", */"Фамилия", "Имя", "Отчество", "Специализация");
     
-    DoctorDialog doctorDialog = new DoctorDialog("Врач", UI.getCurrent(), doctorId, doctorRepository);
+    DoctorDialog doctorDialog = new DoctorDialog("Врач", UI.getCurrent(), doctor, doctorRepository);
   
     if(doctorId > 0){
       doctorRepository.findById(doctorId).ifPresent(e->doctor = e);
