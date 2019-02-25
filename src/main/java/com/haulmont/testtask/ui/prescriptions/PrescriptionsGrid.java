@@ -6,6 +6,7 @@ import com.haulmont.testtask.jpa.prescription.PrescriptionRepository;
 import com.haulmont.testtask.jpa.prescription.Priority;
 import com.haulmont.testtask.jpa.prescription.view.PrescriptionHumanized;
 import com.haulmont.testtask.jpa.prescription.view.PrescriptionHumanizedRepository;
+import com.haulmont.testtask.ui.Helpers;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.data.util.BeanItemContainer;
@@ -13,7 +14,6 @@ import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Sizeable;
-import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -124,24 +124,14 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
   
   private void prepareComboBoxFilter(ComboBox comboBox, String inputPrompt, List<String> strings, Grid.HeaderCell filter) {
     grid.deselectAll();
-    comboBox.setImmediate(true);
-    comboBox.setInputPrompt(inputPrompt);
-    comboBox.setFilteringMode(FilteringMode.CONTAINS);
-    comboBox.setInvalidAllowed(false);
-    comboBox.setNullSelectionAllowed(true);
-    comboBox.setWidth("100%");
-    comboBox.addStyleName(ValoTheme.TEXTFIELD_TINY);
-    comboBox.setContainerDataSource(new BeanItemContainer<>(String.class, strings));
+    Helpers.prepareComboBox(comboBox, inputPrompt, strings);
     comboBox.addValueChangeListener(event -> updateList(filterPrescriptionTextField.getValue()));
     filter.setComponent(comboBox);
   }
   
   private void prepareTextFieldFilter(TextField textField, Grid.HeaderCell filter) {
     grid.deselectAll();
-    textField.setImmediate(true);
-    textField.setInputPrompt("Рецепт...");
-    textField.setWidth("100%");
-    textField.addStyleName(ValoTheme.TEXTFIELD_TINY);
+    Helpers.prepareTextField(textField, "Рецепт...");
     textField.addTextChangeListener(event -> updateList(event.getText()));
     filter.setComponent(filterPrescriptionTextField);
   }
@@ -150,7 +140,7 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
   public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
 
 //    Notification.show("Prescriptions", Notification.Type.HUMANIZED_MESSAGE);
-    updateList(filterPrescriptionTextField.getValue());
+//    updateList(filterPrescriptionTextField.getValue());
     
   }
   
