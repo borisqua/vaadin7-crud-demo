@@ -61,7 +61,7 @@ public class PrescriptionHumanizedController {
     criteria.put("priority", priority);
     criteria.put("pattern", pattern);
     
-    LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@HaulmontLOG4J2:  filterPrescription -> {}", patient);
+    LOGGER.info("HaulmontLOG4J2:  filterPrescription -> {}", patient);
     
     return prescriptionRepository.findByCustomCriteria(PrescriptionHumanized.class, criteria);
   }

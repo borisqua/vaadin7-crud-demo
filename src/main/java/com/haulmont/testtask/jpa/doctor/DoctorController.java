@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -58,10 +59,10 @@ public class DoctorController {
     try{
       return doctorRepository.save(new Doctor(name, surname, patronymic, specialization));
     } catch (DataIntegrityViolationException dataIntegrityError) {
-      LOGGER.info("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE ADDING NEW ENTITY-> {}", dataIntegrityError);
+      LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE ADDING NEW ENTITY-> {}", dataIntegrityError);
       return  null;
     } catch (Exception unknown){
-      LOGGER.info("HaulmontLOG4J2:  UNKNOWN ERROR WHILE ADDING NEW ENTITY -> {}", unknown);
+      LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE ADDING NEW ENTITY -> {}", unknown);
       return  null;
     }
   }
@@ -110,10 +111,10 @@ public class DoctorController {
       doctor.ifPresent(doctorRepository::delete);
       return doctorRepository.findAll();
     } catch (DataIntegrityViolationException dataIntegrityError) {
-      LOGGER.info("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE DELETING DOCTOR ENTITY -> {}", dataIntegrityError);
+      LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE DELETING DOCTOR ENTITY -> {}", dataIntegrityError);
       return doctorRepository.findAll();
     } catch (Exception unknown) {
-      LOGGER.info("HaulmontLOG4J2:  UNKNOWN ERROR WHILE DELETING DOCTOR ENTITY -> {}", unknown);
+      LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE DELETING DOCTOR ENTITY -> {}", unknown);
       return doctorRepository.findAll();
     }
   }
@@ -133,6 +134,16 @@ public class DoctorController {
   Iterable<String> getAllDoctorsSurnames() {
     try{
       return doctorRepository.getAllDoctorsSurnames();
+    } catch (Exception ignored){
+      return null;
+    }
+  }
+  
+  @RequestMapping(method = GET, path = "/fullnames")
+  public @ResponseBody
+  List<String> getAllFullNames(/*@RequestParam(name="pattern") String pattern*/){
+    try{
+      return doctorRepository.getAllDoctorsFullNames();
     } catch (Exception ignored){
       return null;
     }

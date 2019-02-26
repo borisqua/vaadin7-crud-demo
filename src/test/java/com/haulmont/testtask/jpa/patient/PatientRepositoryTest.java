@@ -38,6 +38,6 @@ public class PatientRepositoryTest {
     patientRepository.save(new Patient("Test3Name1", "Test3Surname1"));
     Patient patient = patientRepository.findById(0L).orElseGet(()
       -> new Patient("Test3Name2", "Test3Surname2"));
-    assertThat(patient.getName()).isEqualTo("Test3Surname2");
+    assertThat(patient.getName()).isEqualTo("Test3Name2");
   }
 }

@@ -136,10 +136,10 @@ public class PatientController {
       patient.ifPresent(patientRepository::delete);
       return patientRepository.findAll();
     } catch (DataIntegrityViolationException dataIntegrityError) {
-      LOGGER.info("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE DELETING PATIENT ENTITY -> {}", dataIntegrityError);
+      LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE DELETING PATIENT ENTITY -> {}", dataIntegrityError);
       return patientRepository.findAll();
     } catch (Exception unknown) {
-      LOGGER.info("HaulmontLOG4J2:  UNKNOWN ERROR WHILE DELETING PATIENT ENTITY -> {}", unknown);
+      LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE DELETING PATIENT ENTITY -> {}", unknown);
       return patientRepository.findAll();
     }
   }

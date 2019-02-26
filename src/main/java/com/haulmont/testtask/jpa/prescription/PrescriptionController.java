@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -54,13 +53,13 @@ public class PrescriptionController {
   Prescription addPrescription(@RequestParam(name = "description") String description,
                                @RequestParam(name = "patientId") Long patientId,
                                @RequestParam(name = "doctorId") Long doctorId,
-                               @RequestParam(name = "creationDate", required = false) Date creationDate,
+                               @RequestParam(name = "creationDate", required = false) LocalDate creationDate,
                                @RequestParam(name = "validityLength", required = false) Integer validityLength,
                                @RequestParam(name = "priority", required = false) String  priority
   ) {
     try {
       if (creationDate == null) {
-        creationDate = Date.valueOf(LocalDate.now());
+        creationDate = LocalDate.now();
       }
       if (validityLength == null) {
         validityLength = 7;
@@ -81,7 +80,7 @@ public class PrescriptionController {
                                   @RequestParam(name = "description", required = false) String description,
                                   @RequestParam(name = "patientId", required = false) Long patientId,
                                   @RequestParam(name = "doctorId", required = false) Long doctorId,
-                                  @RequestParam(name = "creationDate", required = false) Date creationDate,
+                                  @RequestParam(name = "creationDate", required = false) LocalDate creationDate,
                                   @RequestParam(name = "validityLength", required = false) Integer validityLength,
                                   @RequestParam(name = "priority", required = false) String priority
   ) {
@@ -126,23 +125,12 @@ public class PrescriptionController {
       prescription.ifPresent(prescriptionRepository::delete);
       return prescriptionRepository.findAll();
     } catch (DataIntegrityViolationException dataIntegrityError) {
-      LOGGER.info("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE DELETING PRESCRIPTION ENTITY -> {}", dataIntegrityError);
+      LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE DELETING PRESCRIPTION ENTITY -> {}", dataIntegrityError);
       return prescriptionRepository.findAll();
     } catch (Exception unknown) {
-      LOGGER.info("HaulmontLOG4J2:  UNKNOWN ERROR WHILE DELETING PRESCRIPTION ENTITY -> {}", unknown);
+      LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE DELETING PRESCRIPTION ENTITY -> {}", unknown);
       return prescriptionRepository.findAll();
     }
-  }
-  
-  @RequestMapping(method = GET, path = "/filter")
-  public @ResponseBody
-  Iterable<Prescription> filterPrescription(
-    @RequestParam(name = "patientId", required = false) Long patientId,
-    @RequestParam(name = "priority", required = false) String priority,
-    @RequestParam(name = "pattern", required = false) String pattern
-  ) {
-    LOGGER.info("HaulmontLOG4J2:  filtered -> {}", patientId);
-    return prescriptionRepository.findByCustomCriteria(patientId, priority, pattern);
   }
   
 }

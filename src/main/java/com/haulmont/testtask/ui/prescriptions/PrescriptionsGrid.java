@@ -14,7 +14,6 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
@@ -26,6 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings("FieldCanBeLocal")
 @SpringView
 @Title("Haulmont test app / Prescriptions")
 @Theme("valo")
@@ -39,8 +39,14 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
   private final ComboBox filterPatientComboBox = new ComboBox();
   private final ComboBox filterPriorityComboBox = new ComboBox();
   private final TextField filterPrescriptionTextField = new TextField(/*"Pattern to search in prescriptions texts..."*/);
+  
+  private final Button addButton = new Button("Add");
   private final Button editButton = new Button("Edit");
   private final Button deleteButton = new Button("Delete");
+  
+  private final DoctorRepository doctorRepository;
+  private final PatientRepository patientRepository;
+  private final PrescriptionRepository prescriptionRepository;
   
   private Prescription prescription;
   
@@ -49,12 +55,17 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
                            PrescriptionRepository prescriptionRepository,
                            PrescriptionHumanizedRepository prescriptionHumanizedRepository) {
     
+    this.doctorRepository = doctorRepository;
+    this.patientRepository = patientRepository;
+    this.prescriptionRepository = prescriptionRepository;
+    
     this.prescriptionHumanizedRepository = prescriptionHumanizedRepository;
     
     Label label = new Label("Рецепты");
     label.setStyleName(ValoTheme.LABEL_HUGE);
     
     grid.setSizeFull();
+    grid.setHeight(100, Unit.PERCENTAGE);
     grid.setColumns(/*"id", */"doctor", "patient", "prescription", "priority", "expiration");
     grid.setEditorEnabled(false);
     
@@ -62,7 +73,7 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     grid.addSelectionListener(event -> {
         if (event.getSelected().size() > 0) {
           prescriptionId = ((PrescriptionHumanized) event.getSelected().toArray()[0]).getId();
-          prescriptionRepository.findById(prescriptionId).ifPresent(e -> prescription = e);
+          this.prescriptionRepository.findById(prescriptionId).ifPresent(e -> prescription = e);
           Notification.show(prescription.toString(), Notification.Type.TRAY_NOTIFICATION);
           editButton.setEnabled(true);
           deleteButton.setEnabled(true);
@@ -93,7 +104,8 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     //live filter on prescription text
     prepareTextFieldFilter(filterPrescriptionTextField, prescriptionFilter);
     
-    setWidth(100, Sizeable.Unit.PERCENTAGE);
+    setWidth(100, Unit.PERCENTAGE);
+    setHeight(100, Unit.PERCENTAGE);
     
     updateList(filterPrescriptionTextField.getValue());
     
@@ -103,15 +115,15 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     controlsLayout.setSizeFull();
     setMargin(true);
     
-    DeleteDialog<Prescription> deleteDialog = new DeleteDialog<>("", UI.getCurrent(), "Удалить выбранную запись?", prescription, prescriptionRepository);
+    DeleteDialog<Prescription> deleteDialog = new DeleteDialog<>("", UI.getCurrent(), "Удалить выбранную запись?", prescription, this.prescriptionRepository);
 
 //    Optional<Doctor> doctor = doctorRepository.findById(id);
 //    doctor.ifPresent(doctorRepository::delete);
-  
-    Button addButton = new Button("Add");
-    addButton.addClickListener(e -> new PrescriptionDialog("Рецепт", UI.getCurrent(), null, prescriptionRepository, doctorRepository, patientRepository).open());
-    editButton.addClickListener(e -> new PrescriptionDialog("Рецепт", UI.getCurrent(), prescription, prescriptionRepository, doctorRepository, patientRepository).open());
-    deleteButton.addClickListener(e -> deleteDialog.open());
+    
+    addButton.addClickListener(e -> new PrescriptionDialog("Рецепт", UI.getCurrent(), null, this.prescriptionRepository, this.doctorRepository, this.patientRepository).open());
+    editButton.addClickListener(e -> new PrescriptionDialog("Рецепт", UI.getCurrent(), prescription, this.prescriptionRepository, this.doctorRepository, this.patientRepository).open());
+    deleteButton.addClickListener(e -> {
+    });
     
     
     buttonsLayout.addComponents(addButton, editButton, deleteButton);

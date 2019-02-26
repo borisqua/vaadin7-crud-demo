@@ -16,3 +16,8 @@
 //todo>> 11. statistics chart to the Start page
 //todo>> 12. publish
 //todo>> 13. email to haulmont
+
+//todo>>check with Java.util.Date / Java.sql.Date / Java.time mess all around
+//
+// java.util.Date date = java.sql.Date.valueOf(localDate);
+// LocalDate ld = new java.sql.Date(date.getTime()).toLocalDate()

@@ -1,10 +1,9 @@
 package com.haulmont.testtask.jpa.prescription;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
 
-@SuppressWarnings({"unused", "FieldCanBeLocal"})
+@SuppressWarnings({"unused"})
 @Entity
 @Table(name = "prescriptions")
 public class Prescription {
@@ -20,7 +19,7 @@ public class Prescription {
   @Column(name="doctorid")
   private Long doctorId;
   @Column(name="creationdate")
-  private Date creationDate;
+  private LocalDate creationDate;
   @Column(name="validitylength")
   private Integer validityLength;
   @Column(name="priority")
@@ -28,19 +27,16 @@ public class Prescription {
   
   public Prescription(){}
   public Prescription(String description, Long patientId, Long doctorId){
-    this(description, patientId, doctorId, Date.valueOf(LocalDate.now()), 7, "Нормальынй");
+    this(description, patientId, doctorId, LocalDate.now(), 7, "Нормальынй");
   }
   public Prescription(String description, Long patientId, Long doctorId,
-                      Date creationDate, Integer validityLength, String priority) {
+                      LocalDate creationDate, Integer validityLength, String priority) {
     this.description = description;
     this.patientId = patientId;
     this.doctorId = doctorId;
     this.creationDate = creationDate;
     this.validityLength = validityLength;
     this.priority = priority;
-  }
-  
-  public Prescription(String prescriptionText, Long doctorId, Long patientId, java.util.Date issueDate, Integer validityLength, String priority) {
   }
   
   public Long getId() {
@@ -71,11 +67,11 @@ public class Prescription {
     this.patientId = patientId;
   }
   
-  public Date getCreationDate() {
+  public LocalDate getCreationDate() {
     return creationDate;
   }
   
-  public void setCreationDate(Date creationDate) {
+  public void setCreationDate(LocalDate creationDate) {
     this.creationDate = creationDate;
   }
   
@@ -97,7 +93,7 @@ public class Prescription {
   
   @Override
   public String toString(){
-    return "Prescription {" +
+    return "{" +
       "id: " + id +
       ", doctorId: " + doctorId +
       ", patientId: " + patientId +

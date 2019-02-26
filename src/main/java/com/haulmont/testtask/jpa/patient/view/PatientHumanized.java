@@ -37,11 +37,7 @@ public class PatientHumanized {
   
   @Override
   public String toString() {
-    return "PatientHumanized {\n " +
-      "\tid: " + id + ", \n" +
-      "\tfullname: " + fullname + ", \n" +
-      "\tphone: " + phone + ", \n" +
-      "}";
+    return ((fullname).trim() + ", телефон: " + phone).trim()+" id:" + id;
   }
 }
 

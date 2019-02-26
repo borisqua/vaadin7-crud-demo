@@ -12,7 +12,7 @@ public interface PatientRepository extends CrudRepository<Patient, Long> {
 //  List<Patient> findByName(String text);
 //  List<Patient> findBySurname(String text);
   
-  @Query(value = "SELECT TRIM(BOTH FROM TRIM(BOTH FROM TRIM(BOTH FROM name)+' '+patronymic)+' '+ surname) as fullName FROM patients", nativeQuery = true)
+  @Query(value = "SELECT id+': '+TRIM(BOTH FROM TRIM(BOTH FROM TRIM(BOTH FROM name)+' '+patronymic)+' '+ surname) as fullName FROM patients", nativeQuery = true)
   List<String> getAllPatientsFullNames(/*@Param("pattern") String pattern*/);
   
   @Query(value = "select distinct name from patients;", nativeQuery = true)

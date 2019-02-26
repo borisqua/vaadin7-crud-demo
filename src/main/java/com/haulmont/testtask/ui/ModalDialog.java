@@ -1,7 +1,13 @@
 package com.haulmont.testtask.ui;
 
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
+import org.springframework.lang.Nullable;
 
+import java.time.LocalDate;
+import java.util.List;
+
+@SuppressWarnings({"SameParameterValue", "unused"})
 public class ModalDialog extends Window {
   
   protected FormLayout form;
@@ -33,8 +39,6 @@ public class ModalDialog extends Window {
     form.setSpacing(true);
     
     HorizontalLayout buttonsLayout = new HorizontalLayout();
-    Button buttonOK = new Button("OK");
-    Button buttonCancel = new Button("Cancel");
     buttonsLayout.addComponents(buttonOK, buttonCancel);
     buttonsLayout.setMargin(true);
     buttonsLayout.setSpacing(true);
@@ -50,11 +54,11 @@ public class ModalDialog extends Window {
     
     setContent(layout);
     layout.setSizeUndefined();
-  
+
 //    buttonOK.addClickListener(event->{
 //      this.isOpened = false;
 //    });
-  
+
 //    buttonCancel.addClickListener(event->{
 //      this.isOpened = false;
 //    });
@@ -68,6 +72,41 @@ public class ModalDialog extends Window {
       hostUI.focus();
     }
     this.isOpened = true;
+  }
+  
+  protected ComboBox prepareStringCombo(String caption, String nullCaption, Integer widthCm,
+                                        FilteringMode filteringMode, @Nullable List<String> container, @Nullable String defaultString) {
+    
+    ComboBox combo = new ComboBox(caption, container);
+    combo.setNullSelectionItemId(nullCaption);
+    combo.setWidth(widthCm, Unit.CM);
+    combo.setImmediate(true);
+    combo.setRequired(true);
+    combo.setNullSelectionAllowed(false);
+    combo.setFilteringMode(filteringMode);
+    combo.setValue(defaultString);
+    
+    return combo;
+    
+  }
+  
+  protected TextArea prepareTextArea(String caption, Integer rows, Integer columns) {
+    TextArea textArea = new TextArea(caption);
+    textArea.setRows(rows);
+    textArea.setColumns(columns);
+    textArea.setImmediate(true);
+    textArea.setRequired(true);
+    
+    return textArea;
+  }
+  
+  protected DateField prepareDateField(String caption) {
+    
+    DateField dateField = new DateField(caption, java.sql.Date.valueOf(LocalDate.now()));
+    dateField.setRequired(true);
+    dateField.setImmediate(true);
+    
+    return dateField;
   }
   
 }
