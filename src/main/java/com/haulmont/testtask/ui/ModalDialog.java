@@ -11,11 +11,25 @@ import java.util.List;
 public class ModalDialog extends Window {
   
   protected FormLayout form;
-  protected boolean isOpened = false;
-  private UI hostUI;
   
-  protected Button buttonOK = new Button("OK");
-  protected Button buttonCancel = new Button("Cancel");
+  private boolean isOpened = false;
+  private UI hostUI;
+  private boolean OKPressed = false;
+  
+  private Button buttonOK = new Button("OK");
+  private Button buttonCancel = new Button("Cancel");
+  
+  public Button getOKButton() {
+    return buttonOK;
+  }
+  
+  public Button getCancelButton() {
+    return buttonCancel;
+  }
+  
+  public boolean isOKPressed() {
+    return OKPressed;
+  }
   
   public ModalDialog(String caption, UI hostUI) {
     
@@ -54,14 +68,18 @@ public class ModalDialog extends Window {
     
     setContent(layout);
     layout.setSizeUndefined();
-
-//    buttonOK.addClickListener(event->{
-//      this.isOpened = false;
-//    });
-
-//    buttonCancel.addClickListener(event->{
-//      this.isOpened = false;
-//    });
+    
+    buttonOK.addClickListener(event -> {
+      this.isOpened = false;
+      OKPressed = true;
+      close();
+    });
+    
+    buttonCancel.addClickListener(event -> {
+      this.isOpened = false;
+      OKPressed = false;
+      close();
+    });
     
   }
   

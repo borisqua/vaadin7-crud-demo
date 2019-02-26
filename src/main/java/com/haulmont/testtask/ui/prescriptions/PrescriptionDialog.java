@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@SuppressWarnings("SameParameterValue")
+@SuppressWarnings({"SameParameterValue"})
 class PrescriptionDialog extends ModalDialog {
   
   private String prescriptionText;
@@ -32,27 +32,31 @@ class PrescriptionDialog extends ModalDialog {
   private Prescription prescription;
   private PrescriptionRepository prescriptionRepository;
   
-  private final ComboBox doctorComboBox;
-  private final ComboBox patientComboBox;
-  private final TextArea prescriptionField;
-  private final ComboBox priorityComboBox;
-  private final DateField issueDateField;
-  private final TextField validityLengthField;
+  private ComboBox doctorComboBox;
+  private ComboBox patientComboBox;
+  private TextArea prescriptionField;
+  private ComboBox priorityComboBox;
+  private DateField issueDateField;
+  private TextField validityLengthField;
   
   private static final Logger LOGGER = LogManager.getLogger();
   
   PrescriptionDialog(String caption, UI hostUI,
                      @Nullable Prescription prescription,
-                     PrescriptionRepository prescriptionRepository,
-                     DoctorRepository doctorRepository,
-                     PatientRepository patientRepository) {
+                     @Nullable PrescriptionRepository prescriptionRepository,
+                     @Nullable DoctorRepository doctorRepository,
+                     @Nullable PatientRepository patientRepository) {
     
     super(caption, hostUI);
+    
+    if(prescriptionRepository == null || doctorRepository == null || patientRepository == null){
+      return;
+    }
     
     this.doctorComboBox = prepareStringCombo("Врач", "Ф.И.О.", 10, FilteringMode.CONTAINS,
       doctorRepository.getAllDoctorsFullNames(), null);
     this.patientComboBox = prepareStringCombo("Врач", "Ф.И.О.", 10, FilteringMode.CONTAINS,
-      patientRepository.getAllPatientsFullNames(), null);
+      patientRepository.getAllPatientsFullNameAndId(), null);
     this.prescriptionField = prepareTextArea("рецепт", 10, 23);
     this.priorityComboBox = prepareStringCombo("Приоритет", "", 10, FilteringMode.OFF,
       Stream.of(Priority.values()).map(Priority::toString).collect(Collectors.toList()), "Нормальный");
@@ -76,7 +80,7 @@ class PrescriptionDialog extends ModalDialog {
       validityLengthField.setValue(String.valueOf(this.prescription.getValidityLength()));
     }
     
-    buttonOK.addClickListener(event -> {
+    getOKButton().addClickListener(event -> {
       try {
         prescriptionText = prescriptionField.getValue();
         doctorString = doctorComboBox.getValue().toString();
@@ -90,19 +94,6 @@ class PrescriptionDialog extends ModalDialog {
           this.prescription = new Prescription(prescriptionText, patientId, doctorId, new java.sql.Date(issueDate.getTime()).toLocalDate(), validityLength, priority);
           this.prescriptionRepository.save(this.prescription);
         } else { // update existent
-//          Prescription presc=new Prescription();
-//          Optional<Prescription> p = this.prescriptionRepository.findById(this.prescription.getId());
-//          if(p.isPresent()) {
-//            presc = p.get();
-//          }
-//          presc.setDescription(prescriptionText);
-//          presc.setDoctorId(doctorId);
-//          presc.setPatientId(9L);
-//          presc.setPriority("Срочный (Cito)");
-//          presc.setCreationDate(LocalDate.parse("2019-02-01"));
-//          presc.setValidityLength(400);
-//          this.prescriptionRepository.save(presc);
-          
           this.prescription.setDescription(prescriptionText);
           this.prescription.setPatientId(patientId);
           this.prescription.setDoctorId(doctorId);
@@ -118,13 +109,6 @@ class PrescriptionDialog extends ModalDialog {
         LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE SAVING PRESCRIPTIONS ENTITY -> {}", e);
         e.printStackTrace();
       }
-      isOpened = false;
-      close();
-    });
-    
-    buttonCancel.addClickListener(event -> {
-      isOpened = false;
-      close();
     });
   }
   

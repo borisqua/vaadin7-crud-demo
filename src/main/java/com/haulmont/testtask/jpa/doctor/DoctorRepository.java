@@ -16,7 +16,7 @@ public interface DoctorRepository extends CrudRepository<Doctor, Long> {
   
   List<Doctor> findBySpecialization(String text);
   
-  @Query(value = "SELECT TRIM(BOTH FROM id+': '+TRIM(BOTH FROM TRIM(BOTH FROM name)+' '+patronymic)+' '+ surname) as fullName FROM doctors", nativeQuery = true)
+  @Query(value = "SELECT id+': '+TRIM(BOTH FROM+TRIM(BOTH FROM TRIM(BOTH FROM name)+' '+patronymic)+' '+ surname) as fullName FROM doctors", nativeQuery = true)
   List<String> getAllDoctorsFullNames(/*@Param("pattern") String pattern*/);
   
   @Query(value = "select distinct name from doctors;", nativeQuery = true)

@@ -62,7 +62,7 @@ public class PatientController {
   public @ResponseBody
   List<String> getAllFullNames(/*@RequestParam(name="pattern") String pattern*/){
     try{
-      return patientRepository.getAllPatientsFullNames();
+      return patientRepository.getAllPatientsFullNameAndId();
     } catch (Exception ignored){
       return null;
     }

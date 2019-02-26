@@ -6,26 +6,37 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.lang.Nullable;
 
 @SuppressWarnings("unused")
 public class DeleteDialog<T> extends ModalDialog {
   
-  public DeleteDialog(String caption, UI hostUI, String labelString, T entity, CrudRepository<T, Long> repository) {
+  private final T entity;
+  private final CrudRepository<T, Long> repository;
+  
+  public DeleteDialog(String caption, UI hostUI,
+                      String labelString,
+                      @Nullable T entity,
+                      @Nullable CrudRepository<T, Long> repository) {
     
     super(caption, hostUI);
-    
+  
+    this.entity = entity;
+    this.repository = repository;
     Label label = new Label(labelString);
     label.setStyleName(ValoTheme.LABEL_HUGE);
     form.addComponent(label);
-    
-    buttonOK.addClickListener(event -> {
+  
+    if(entity == null || repository == null){
+      return;
+    }
+  
+    getOKButton().addClickListener(event -> {
       try {
-        repository.delete(entity);
+        this.repository.delete(this.entity);
       } catch (DataIntegrityViolationException e) {
         Notification.show("Запись не может быть удалена. Похоже на эту запись существуют сслыки в рецептах, сначала нужно удалить эти рецепты", Notification.Type.ERROR_MESSAGE);
       }
-      close();
     });
-    buttonCancel.addClickListener(event->close());
   }
 }
