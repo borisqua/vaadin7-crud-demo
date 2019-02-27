@@ -7,11 +7,11 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("unused")
-class DoctorDialog extends PersonForm {
+class EditDoctorDialog extends PersonForm {
   
   protected final TextField specialization = new TextField("Специализация");
   
-  DoctorDialog(String caption, UI hostUI, Doctor doctor, DoctorRepository repository) {
+  EditDoctorDialog(String caption, UI hostUI, Doctor doctor, DoctorRepository repository) {
     
     super(caption, hostUI);
     

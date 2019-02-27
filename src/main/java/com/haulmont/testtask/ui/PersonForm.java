@@ -5,15 +5,15 @@ import com.vaadin.ui.UI;
 
 public class PersonForm extends ModalDialog{
   
-  protected final TextField surname = new TextField("Фамилия");
-  protected final TextField name = new TextField("Имя");
-  protected final TextField patronymic = new TextField("Отчество");
+  protected final TextField surnameField = new TextField("Фамилия");
+  protected final TextField nameField = new TextField("Имя");
+  protected final TextField patronymicField = new TextField("Отчество");
   
   public PersonForm(String caption, UI hostUI) {
     
     super(caption, hostUI);
     
-    form.addComponents(surname, name, patronymic);
+    form.addComponents(surnameField, nameField, patronymicField);
     
   }
 }

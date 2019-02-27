@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"SameParameterValue"})
-class PrescriptionDialog extends ModalDialog {
+class EditPrescriptionDialog extends ModalDialog {
   
   private String prescriptionText;
   private Long doctorId;
@@ -31,6 +31,7 @@ class PrescriptionDialog extends ModalDialog {
   private Integer validityLength;
   private Prescription prescription;
   private PrescriptionRepository prescriptionRepository;
+  private PrescriptionsGrid prescriptionsGrid;
   
   private ComboBox doctorComboBox;
   private ComboBox patientComboBox;
@@ -41,17 +42,19 @@ class PrescriptionDialog extends ModalDialog {
   
   private static final Logger LOGGER = LogManager.getLogger();
   
-  PrescriptionDialog(String caption, UI hostUI,
-                     @Nullable Prescription prescription,
-                     @Nullable PrescriptionRepository prescriptionRepository,
-                     @Nullable DoctorRepository doctorRepository,
-                     @Nullable PatientRepository patientRepository) {
+  EditPrescriptionDialog(String caption, UI hostUI, PrescriptionsGrid prescriptionsGrid,
+                         @Nullable Prescription prescription,
+                         @Nullable PrescriptionRepository prescriptionRepository,
+                         @Nullable DoctorRepository doctorRepository,
+                         @Nullable PatientRepository patientRepository) {
     
     super(caption, hostUI);
     
-    if(prescriptionRepository == null || doctorRepository == null || patientRepository == null){
+    if (prescriptionRepository == null || doctorRepository == null || patientRepository == null) {
       return;
     }
+    
+    this.prescriptionsGrid = prescriptionsGrid;
     
     this.doctorComboBox = prepareStringCombo("Врач", "Ф.И.О.", 10, FilteringMode.CONTAINS,
       doctorRepository.getAllDoctorsFullNames(), null);
@@ -91,7 +94,8 @@ class PrescriptionDialog extends ModalDialog {
         issueDate = issueDateField.getValue();
         validityLength = Integer.parseInt(validityLengthField.getValue());
         if (this.prescription == null) { //create new
-          this.prescription = new Prescription(prescriptionText, patientId, doctorId, new java.sql.Date(issueDate.getTime()).toLocalDate(), validityLength, priority);
+          this.prescription = new Prescription(prescriptionText, patientId, doctorId,
+            new java.sql.Date(issueDate.getTime()).toLocalDate(), validityLength, priority);
           this.prescriptionRepository.save(this.prescription);
         } else { // update existent
           this.prescription.setDescription(prescriptionText);
@@ -102,11 +106,12 @@ class PrescriptionDialog extends ModalDialog {
           this.prescription.setValidityLength(validityLength);
           this.prescriptionRepository.save(this.prescription);
         }
+        this.prescriptionsGrid.updateList(this.prescriptionsGrid.getPrescriptionTextFilter());
       } catch (DataIntegrityViolationException dataIntegrityError) {
-        LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE SAVING PRESCRIPTIONS ENTITY -> {}", dataIntegrityError);
+        LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE SAVING PRESCRIPTION ENTITY -> {}", dataIntegrityError);
         dataIntegrityError.printStackTrace();
       } catch (NumberFormatException e) {
-        LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE SAVING PRESCRIPTIONS ENTITY -> {}", e);
+        LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE SAVING PRESCRIPTION ENTITY -> {}", e);
         e.printStackTrace();
       }
     });

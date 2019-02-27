@@ -1,7 +1,6 @@
 package com.haulmont.testtask.ui;
 
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Sizeable;
@@ -15,11 +14,12 @@ import java.util.stream.Stream;
 
 public class GridForm<T> extends VerticalLayout implements View {
   
-  protected CrudRepository<T, Long> repository;
-  protected Grid grid = new Grid();
   protected final Button addButton = new Button("Add");
   protected final Button editButton = new Button("Edit");
   protected final Button deleteButton = new Button("Delete");
+  
+  protected CrudRepository<T, Long> repository;
+  protected Grid grid = new Grid();
   
   public GridForm(Class<T> clazz, String gridCaption, CrudRepository<T, Long> repository){
     
@@ -72,13 +72,12 @@ public class GridForm<T> extends VerticalLayout implements View {
   public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
   }
   
-  private void updateList(Class<T> clazz) {
+  public void updateList(Class<T> clazz) {
     grid.deselectAll();
     editButton.setEnabled(false);
     deleteButton.setEnabled(false);
     final BeanItemContainer<T> container = new BeanItemContainer<>(clazz, (List<T>) repository.findAll());
-    final GeneratedPropertyContainer wrapContainer = new GeneratedPropertyContainer(container);//todo>> to add possible rendered content
-    grid.setContainerDataSource(wrapContainer);
+    grid.setContainerDataSource(container);
 //    Notification.show("Данные обновлены.", Notification.Type.TRAY_NOTIFICATION);
   }
   

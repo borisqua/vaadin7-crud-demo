@@ -23,6 +23,7 @@ public class DeleteDialog<T> extends ModalDialog {
   
     this.entity = entity;
     this.repository = repository;
+    
     Label label = new Label(labelString);
     label.setStyleName(ValoTheme.LABEL_HUGE);
     form.addComponent(label);

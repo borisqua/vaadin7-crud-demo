@@ -7,12 +7,10 @@ import com.haulmont.testtask.jpa.prescription.PrescriptionRepository;
 import com.haulmont.testtask.jpa.prescription.Priority;
 import com.haulmont.testtask.jpa.prescription.view.PrescriptionHumanized;
 import com.haulmont.testtask.jpa.prescription.view.PrescriptionHumanizedRepository;
-import com.haulmont.testtask.ui.DeleteDialog;
 import com.haulmont.testtask.ui.ModalDialog;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.combobox.FilteringMode;
@@ -32,10 +30,7 @@ import java.util.stream.Stream;
 @Theme("valo")
 public class PrescriptionsGrid extends VerticalLayout implements View {
   
-  private Long prescriptionId = -1L;
   private final PrescriptionHumanizedRepository prescriptionHumanizedRepository;
-  
-  private Grid grid = new Grid();
   
   private final ComboBox filterPatientComboBox = new ComboBox();
   private final ComboBox filterPriorityComboBox = new ComboBox();
@@ -49,9 +44,10 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
   private final PatientRepository patientRepository;
   private final PrescriptionRepository prescriptionRepository;
   
-  
-  private ModalDialog modalDialog = new PrescriptionDialog("Рецепт", UI.getCurrent(), null, null, null, null);
-  private DeleteDialog<Prescription> deleteDialog = new DeleteDialog<>("", UI.getCurrent(), "Удалить выбранную запись?", null, null);
+  private Long prescriptionId = -1L;
+  private Grid grid = new Grid();
+  private ModalDialog editDialog;
+  private DeletePrescriptionDialog deleteDialog;
   
   private Prescription prescription;
   
@@ -66,7 +62,10 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     
     this.prescriptionHumanizedRepository = prescriptionHumanizedRepository;
   
-    modalDialog = new PrescriptionDialog("Рецепт", UI.getCurrent(), null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
+    editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this,
+      null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
+    deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this,
+      "Удалить выбранную запись?", null, this.prescriptionRepository);
     
     Label label = new Label("Рецепты");
     label.setStyleName(ValoTheme.LABEL_HUGE);
@@ -82,12 +81,13 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
           prescriptionId = ((PrescriptionHumanized) event.getSelected().toArray()[0]).getId();
           this.prescriptionRepository.findById(prescriptionId).ifPresent(e -> prescription = e);
           Notification.show(prescription.toString(), Notification.Type.TRAY_NOTIFICATION);
-          deleteDialog = new DeleteDialog<>("", UI.getCurrent(), "Удалить выбранную запись?", prescription, this.prescriptionRepository);
-          modalDialog = new PrescriptionDialog("Рецепт", UI.getCurrent(), prescription, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
+          deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this, "Удалить выбранную запись?", prescription, this.prescriptionRepository);
+          editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, prescription, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
           editButton.setEnabled(true);
           deleteButton.setEnabled(true);
         } else {
-          modalDialog = new PrescriptionDialog("Рецепт", UI.getCurrent(), null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
+          deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this, "Удалить выбранную запись?", null, this.prescriptionRepository);
+          editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
           editButton.setEnabled(false);
           deleteButton.setEnabled(false);
         }
@@ -126,20 +126,9 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     setMargin(true);
     
     
-    addButton.addClickListener(e -> modalDialog.open());
-    editButton.addClickListener(e -> modalDialog.open());
+    addButton.addClickListener(e -> editDialog.open());
+    editButton.addClickListener(e -> editDialog.open());
     deleteButton.addClickListener(e -> deleteDialog.open());
-    modalDialog.getOKButton().addClickListener(e->{
-      if (modalDialog.isOKPressed()) {
-        updateList(filterPrescriptionTextField.getValue());
-      }
-    });
-    deleteDialog.getOKButton().addClickListener(e->{
-      if (modalDialog.isOKPressed()) {
-        updateList(filterPrescriptionTextField.getValue());
-      }
-    });
-    
     
     buttonsLayout.addComponents(addButton, editButton, deleteButton);
     controlsLayout.addComponents(label, buttonsLayout);
@@ -179,7 +168,11 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
   public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
   }
   
-  private void updateList(String prescriptionText) {
+  String getPrescriptionTextFilter(){
+    return this.filterPrescriptionTextField.getValue();
+  }
+  
+  void updateList(String prescriptionText) {
     grid.deselectAll();
     editButton.setEnabled(false);
     deleteButton.setEnabled(false);
@@ -189,9 +182,7 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     criteria.put("prescription", prescriptionText);
     final BeanItemContainer<PrescriptionHumanized> container =
       new BeanItemContainer<>(PrescriptionHumanized.class, prescriptionHumanizedRepository.findByCustomCriteria(PrescriptionHumanized.class, criteria));
-    final GeneratedPropertyContainer wrapContainer =
-      new GeneratedPropertyContainer(container);//todo>> to add rendered content
-    grid.setContainerDataSource(wrapContainer);
+    grid.setContainerDataSource(container);
 //    Notification.show("Данные обновлены.", Notification.Type.TRAY_NOTIFICATION);
   }
   
