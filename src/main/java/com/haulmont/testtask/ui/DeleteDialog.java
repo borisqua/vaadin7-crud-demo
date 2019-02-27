@@ -21,6 +21,7 @@ public class DeleteDialog<T> extends ModalDialog {
     
     super(caption, hostUI);
   
+    getOKButton().setEnabled(true);
     this.entity = entity;
     this.repository = repository;
     

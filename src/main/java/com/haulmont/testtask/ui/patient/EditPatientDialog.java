@@ -38,6 +38,11 @@ class EditPatientDialog extends PersonForm {
       surnameField.setValue(this.patient.getSurname());
       patronymicField.setValue(this.patient.getPatronymic());
       phoneField.setValue(this.patient.getPhone());
+    } else {
+      nameField.setValue("");
+      surnameField.setValue("");
+      patronymicField.setValue("");
+      phoneField.setValue("");
     }
     getOKButton().addClickListener(event -> {
       try {

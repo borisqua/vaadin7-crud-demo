@@ -14,26 +14,15 @@ public class ModalDialog extends Window {
   
   private boolean isOpened = false;
   private UI hostUI;
-  private boolean OKPressed = false;
   
   private Button buttonOK = new Button("OK");
   private Button buttonCancel = new Button("Cancel");
   
-  public Button getOKButton() {
-    return buttonOK;
-  }
-  
-  public Button getCancelButton() {
-    return buttonCancel;
-  }
-  
-  public boolean isOKPressed() {
-    return OKPressed;
-  }
-  
   public ModalDialog(String caption, UI hostUI) {
     
     super(caption);
+  
+    buttonOK.setEnabled(false);
     
     center();
     setModal(true);
@@ -71,16 +60,22 @@ public class ModalDialog extends Window {
     
     buttonOK.addClickListener(event -> {
       this.isOpened = false;
-      OKPressed = true;
       close();
     });
     
     buttonCancel.addClickListener(event -> {
       this.isOpened = false;
-      OKPressed = false;
       close();
     });
     
+  }
+  
+  protected Button getOKButton() {
+    return buttonOK;
+  }
+  
+  protected Button getCancelButton() {
+    return buttonCancel;
   }
   
   public void open() {
@@ -98,7 +93,7 @@ public class ModalDialog extends Window {
     ComboBox combo = new ComboBox(caption, container);
     combo.setNullSelectionItemId(nullCaption);
     combo.setWidth(widthCm, Unit.CM);
-    combo.setImmediate(true);
+    combo.setImmediate(false);
     combo.setRequired(true);
     combo.setNullSelectionAllowed(false);
     combo.setFilteringMode(filteringMode);

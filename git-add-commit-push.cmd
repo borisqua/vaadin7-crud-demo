@@ -8,7 +8,7 @@ goto done
 
 :blank
 echo.
-echo !!! ... add a commit message ...
+echo  ... You've forgoten a commit message ...
 :done
 echo.
 echo done.

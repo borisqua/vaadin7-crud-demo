@@ -38,6 +38,11 @@ class EditDoctorDialog extends PersonForm {
       surnameField.setValue(this.doctor.getSurname());
       patronymicField.setValue(this.doctor.getPatronymic());
       specializationField.setValue(this.doctor.getSpecialization());
+    } else {
+      nameField.setValue("");
+      surnameField.setValue("");
+      patronymicField.setValue("");
+      specializationField.setValue("");
     }
     getOKButton().addClickListener(event -> {
       try {

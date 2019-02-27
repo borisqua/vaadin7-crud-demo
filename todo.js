@@ -21,3 +21,11 @@
 //
 // java.util.Date date = java.sql.Date.valueOf(localDate);
 // LocalDate ld = new java.sql.Date(date.getTime()).toLocalDate()
+
+// +79272600466
+// 79272600466
+// 7(9272)600-46-64
+// +7(9272)600-46-64
+// 8 (846) 278-45-40
+// 8 846 278 45 40
+// 8 846 278-45-40

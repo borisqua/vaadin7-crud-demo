@@ -6,7 +6,6 @@ import com.haulmont.testtask.jpa.prescription.Prescription;
 import com.haulmont.testtask.jpa.prescription.PrescriptionRepository;
 import com.haulmont.testtask.jpa.prescription.Priority;
 import com.haulmont.testtask.ui.ModalDialog;
-import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.lang.Nullable;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -67,8 +67,8 @@ class EditPrescriptionDialog extends ModalDialog {
     this.validityLengthField = new TextField("Срок действия", String.valueOf(7));
     this.prescription = prescription;
     this.prescriptionRepository = prescriptionRepository;
-    validityLengthField.addValidator(new IntegerRangeValidator("Срок действия рецепта - от одного до 365 дней", 1, 365));
-    validityLengthField.setImmediate(true);
+//    validityLengthField.addValidator(new IntegerRangeValidator("Срок действия рецепта - от одного до 365 дней", 1, 365));
+//    validityLengthField.setImmediate(true);
     
     form.addComponents(doctorComboBox, patientComboBox, prescriptionField, priorityComboBox, issueDateField, validityLengthField);
     
@@ -81,6 +81,13 @@ class EditPrescriptionDialog extends ModalDialog {
       priorityComboBox.setValue(this.prescription.getPriority());
       issueDateField.setValue(java.sql.Date.valueOf(this.prescription.getCreationDate()));
       validityLengthField.setValue(String.valueOf(this.prescription.getValidityLength()));
+    } else {
+      prescriptionField.setValue("");
+      doctorComboBox.setValue("");
+      patientComboBox.setValue("");
+      priorityComboBox.setValue("Нормальный");
+      issueDateField.setValue(java.sql.Date.valueOf(LocalDate.now()));
+      validityLengthField.setValue("7");
     }
     
     getOKButton().addClickListener(event -> {
