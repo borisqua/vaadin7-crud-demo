@@ -57,18 +57,17 @@ class EditPrescriptionDialog extends ModalDialog {
     this.prescriptionsGrid = prescriptionsGrid;
     
     this.doctorComboBox = prepareStringCombo("Врач", "Ф.И.О.", 10, FilteringMode.CONTAINS,
-      doctorRepository.getAllDoctorsFullNames(), null);
-    this.patientComboBox = prepareStringCombo("Врач", "Ф.И.О.", 10, FilteringMode.CONTAINS,
-      patientRepository.getAllPatientsFullNameAndId(), null);
-    this.prescriptionField = prepareTextArea("рецепт", 10, 23);
+      doctorRepository.getAllDoctorsFullNames(), null, true);
+    this.patientComboBox = prepareStringCombo("Пациент", "Ф.И.О.", 10, FilteringMode.CONTAINS,
+      patientRepository.getAllPatientsFullNameAndId(), null, true);
+    this.prescriptionField = prepareTextArea("Рецепт", 10, 23, true);
     this.priorityComboBox = prepareStringCombo("Приоритет", "", 10, FilteringMode.OFF,
-      Stream.of(Priority.values()).map(Priority::toString).collect(Collectors.toList()), "Нормальный");
-    this.issueDateField = prepareDateField("дата выдачи");
-    this.validityLengthField = new TextField("Срок действия", String.valueOf(7));
+      Stream.of(Priority.values()).map(Priority::toString).collect(Collectors.toList()), "Нормальный", true);
+    this.issueDateField = prepareDateField("Дата выдачи", true);
+    this.validityLengthField = prepareIntegerField("Срок действия", 7, true);
+    
     this.prescription = prescription;
     this.prescriptionRepository = prescriptionRepository;
-//    validityLengthField.addValidator(new IntegerRangeValidator("Срок действия рецепта - от одного до 365 дней", 1, 365));
-//    validityLengthField.setImmediate(true);
     
     form.addComponents(doctorComboBox, patientComboBox, prescriptionField, priorityComboBox, issueDateField, validityLengthField);
     
@@ -91,38 +90,83 @@ class EditPrescriptionDialog extends ModalDialog {
     }
     
     getOKButton().addClickListener(event -> {
-      try {
-        prescriptionText = prescriptionField.getValue();
-        doctorString = doctorComboBox.getValue().toString();
-        doctorId = Long.parseLong(doctorString.substring(0, doctorString.indexOf(':')));
-        patientString = patientComboBox.getValue().toString();
-        patientId = Long.parseLong(patientString.substring(0, patientString.indexOf(':')));
-        priority = priorityComboBox.getValue().toString();
-        issueDate = issueDateField.getValue();
-        validityLength = Integer.parseInt(validityLengthField.getValue());
-        if (this.prescription == null) { //create new
-          this.prescription = new Prescription(prescriptionText, patientId, doctorId,
-            new java.sql.Date(issueDate.getTime()).toLocalDate(), validityLength, priority);
-          this.prescriptionRepository.save(this.prescription);
-        } else { // update existent
-          this.prescription.setDescription(prescriptionText);
-          this.prescription.setPatientId(patientId);
-          this.prescription.setDoctorId(doctorId);
-          this.prescription.setPriority(priority);
-          this.prescription.setCreationDate(new java.sql.Date(issueDate.getTime()).toLocalDate());//fuck
-          this.prescription.setValidityLength(validityLength);
-          this.prescriptionRepository.save(this.prescription);
+      if (formIsValid()) {
+        try {
+          prescriptionText = prescriptionField.getValue();
+          doctorString = doctorComboBox.getValue().toString();
+          doctorId = Long.parseLong(doctorString.substring(0, doctorString.indexOf(':')));
+          patientString = patientComboBox.getValue().toString();
+          patientId = Long.parseLong(patientString.substring(0, patientString.indexOf(':')));
+          priority = priorityComboBox.getValue().toString();
+          issueDate = issueDateField.getValue();
+          validityLength = Integer.parseInt(validityLengthField.getValue());
+          if (this.prescription == null) { //create new
+            this.prescription = new Prescription(prescriptionText, patientId, doctorId,
+              new java.sql.Date(issueDate.getTime()).toLocalDate(), validityLength, priority);
+            this.prescriptionRepository.save(this.prescription);
+          } else { // update existent
+            this.prescription.setDescription(prescriptionText);
+            this.prescription.setPatientId(patientId);
+            this.prescription.setDoctorId(doctorId);
+            this.prescription.setPriority(priority);
+            this.prescription.setCreationDate(new java.sql.Date(issueDate.getTime()).toLocalDate());//fuck
+            this.prescription.setValidityLength(validityLength);
+            this.prescriptionRepository.save(this.prescription);
+          }
+          this.prescriptionsGrid.updateList(this.prescriptionsGrid.getPrescriptionTextFilter());
+        } catch (DataIntegrityViolationException dataIntegrityError) {
+          LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE SAVING PRESCRIPTION ENTITY -> {}", dataIntegrityError);
+          dataIntegrityError.printStackTrace();
+        } catch (NumberFormatException e) {
+          LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE SAVING PRESCRIPTION ENTITY -> {}", e);
+          e.printStackTrace();
+        } finally {
+          this.prescription = null;
+          isOpened = false;
+          close();
         }
-        this.prescriptionsGrid.updateList(this.prescriptionsGrid.getPrescriptionTextFilter());
-      } catch (DataIntegrityViolationException dataIntegrityError) {
-        LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE SAVING PRESCRIPTION ENTITY -> {}", dataIntegrityError);
-        dataIntegrityError.printStackTrace();
-      } catch (NumberFormatException e) {
-        LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE SAVING PRESCRIPTION ENTITY -> {}", e);
-        e.printStackTrace();
+      } else {
+        Notification.show("Данные введены не полностью или неверный формат данных", Notification.Type.TRAY_NOTIFICATION);
       }
     });
   }
   
+  private Boolean formIsValid() {
+    prescriptionField.setValidationVisible(false);
+    doctorComboBox.setValidationVisible(false);
+    patientComboBox.setValidationVisible(false);
+    priorityComboBox.setValidationVisible(false);
+    issueDateField.setValidationVisible(false);
+    validityLengthField.setValidationVisible(false);
+//    try {
+//      patientComboBox.validate();
+//      doctorComboBox.validate();
+//    } catch (Validator.InvalidValueException ignored) {
+//      Notification.show("Необходимо выбрать имя из списка", Notification.Type.ERROR_MESSAGE);
+//    }
+//    try {
+//      prescriptionField.validate();
+//    } catch (Validator.InvalidValueException ignored) {
+//      Notification.show("Необходимо заполнить содержание рецепта", Notification.Type.ERROR_MESSAGE);
+//    }
+//    try {
+//      priorityComboBox.validate();
+//    } catch (Validator.InvalidValueException ignored) {
+//      Notification.show("Необходимо выбрать приоритет из списка", Notification.Type.ERROR_MESSAGE);
+//    }
+//    try {
+//      issueDateField.validate();
+//    } catch (Validator.InvalidValueException ignored) {
+//      Notification.show("Необходимо правильно ввести дату выдачи рецепта", Notification.Type.ERROR_MESSAGE);
+//    }
+//    try {
+//      validityLengthField.validate();
+//    } catch (Validator.InvalidValueException ignored) {
+//      Notification.show("Необходимо правильно срок действия рецепта в днях от 1 до 365", Notification.Type.ERROR_MESSAGE);
+//    }
+  
+    return prescriptionField.isValid() && doctorComboBox.isValid() && patientComboBox.isValid() &&
+      priorityComboBox.isValid() && issueDateField.isValid() && validityLengthField.isValid();
+  }
   
 }

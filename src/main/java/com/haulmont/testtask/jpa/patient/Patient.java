@@ -2,7 +2,7 @@ package com.haulmont.testtask.jpa.patient;
 
 import javax.persistence.*;
 
-@SuppressWarnings({"unused"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 @Entity
 @Table(name="patients")
 public class Patient {

@@ -59,7 +59,7 @@ create view all_patients as
     id,
     trim(both from trim(both from trim(both from name)+' '+patronymic)+' '+surname) as fullname,
     phone
-  from patients)
+  from patients);
 
 --7
 create view all_doctors as
@@ -67,4 +67,18 @@ create view all_doctors as
     id,
     trim(both from trim(both from trim(both from name)+' '+patronymic)+' '+surname) as fullname,
     specialization
-  from doctors)
+  from doctors);
+
+--8
+CREATE VIEW DOCTORS_ALL_RESULTS AS
+SELECT d.id                                                                                     as id,
+       TRIM(BOTH FROM +TRIM(BOTH FROM TRIM(BOTH FROM name) + ' ' + patronymic) + ' ' + surname) AS doctor,
+       COUNT(*)                                                                                 AS number
+FROM prescriptions AS p
+       INNER JOIN doctors AS d ON d.id = p.doctorId
+GROUP BY d.id
+ORDER BY number DESC;
+
+--9
+CREATE VIEW DOCTORS_CHARTS AS
+  SELECT id, doctor, number, REPEAT(CHAR(9606), number)+'  '+number as chart FROM DOCTORS_ALL_RESULTS;

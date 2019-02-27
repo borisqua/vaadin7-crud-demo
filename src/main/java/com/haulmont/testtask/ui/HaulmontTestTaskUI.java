@@ -4,6 +4,7 @@ import com.haulmont.testtask.jpa.doctor.DoctorRepository;
 import com.haulmont.testtask.jpa.patient.PatientRepository;
 import com.haulmont.testtask.jpa.prescription.PrescriptionRepository;
 import com.haulmont.testtask.jpa.prescription.view.PrescriptionHumanizedRepository;
+import com.haulmont.testtask.jpa.stats.DoctorResultsRepository;
 import com.haulmont.testtask.ui.doctor.DoctorsGrid;
 import com.haulmont.testtask.ui.patient.PatientsGrid;
 import com.haulmont.testtask.ui.prescriptions.PrescriptionsGrid;
@@ -36,25 +37,32 @@ public class HaulmontTestTaskUI extends UI {
   private final PatientRepository patientRepository;
   private final PrescriptionRepository prescriptionRepository;
   private final PrescriptionHumanizedRepository prescriptionHumanizedRepository;
+  private final DoctorResultsRepository doctorResultsRepository;
   
   @Autowired
-  public HaulmontTestTaskUI(DoctorRepository doctorRepository,
+  public HaulmontTestTaskUI( DoctorRepository doctorRepository,
                             PatientRepository patientRepository,
                             PrescriptionRepository prescriptionRepository,
-                            PrescriptionHumanizedRepository prescriptionHumanizedRepository
-                            ) {
+                            PrescriptionHumanizedRepository prescriptionHumanizedRepository,
+                            DoctorResultsRepository doctorResultsRepository) {
+    
     this.doctorRepository = doctorRepository;
     this.patientRepository = patientRepository;
-    this.prescriptionRepository= prescriptionRepository;
+    this.prescriptionRepository = prescriptionRepository;
     this.prescriptionHumanizedRepository = prescriptionHumanizedRepository;
+    this.doctorResultsRepository = doctorResultsRepository;
   }
   
   @Override
   protected void init(VaadinRequest vaadinRequest) {
     
+    setSizeFull();
+    
     final VerticalLayout layout = new VerticalLayout();
-  
+    layout.setMargin(true);
+    
     VerticalLayout content = new VerticalLayout();
+    content.setSizeFull();
     
     MenuBar menuBar = new MenuBar();
     menuBar.setWidth(100, Unit.PERCENTAGE);
@@ -67,17 +75,17 @@ public class HaulmontTestTaskUI extends UI {
       item -> navigator.navigateTo(DOCTORS));
     menuBar.addItem("Пациенты", /*FontAwesome.MALE*/null,
       item -> navigator.navigateTo(PATIENTS));
-
+    
     layout.addComponents(menuBar, content);
     
     layout.setComponentAlignment(menuBar, Alignment.TOP_CENTER);
     
     navigator = new Navigator(this, content);
-    navigator.addView(START, new StartView());
+    navigator.addView(START, new StartView(doctorResultsRepository));
     navigator.addView(PRESCRIPTIONS, new PrescriptionsGrid(patientRepository, doctorRepository, prescriptionRepository, prescriptionHumanizedRepository));
     navigator.addView(DOCTORS, new DoctorsGrid(doctorRepository));
     navigator.addView(PATIENTS, new PatientsGrid(patientRepository));
-  
+    
     setContent(layout);
     navigator.navigateTo(START);
   }

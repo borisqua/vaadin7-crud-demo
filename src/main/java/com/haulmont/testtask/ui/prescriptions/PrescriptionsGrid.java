@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("FieldCanBeLocal")
 @SpringView
-@Title("Haulmont test app / Prescriptions")
+@Title("Haulmont test app / Рецепты")
 @Theme("valo")
 public class PrescriptionsGrid extends VerticalLayout implements View {
   
@@ -62,6 +62,8 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     
     this.prescriptionHumanizedRepository = prescriptionHumanizedRepository;
   
+    setSizeFull();
+    
     editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this,
       null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
     deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this,
@@ -71,9 +73,10 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     label.setStyleName(ValoTheme.LABEL_HUGE);
     
     grid.setSizeFull();
-    grid.setHeight(100, Unit.PERCENTAGE);
+    grid.setHeight(15, Unit.CM);
     grid.setColumns(/*"id", */"doctor", "patient", "prescription", "priority", "expiration");
     grid.setEditorEnabled(false);
+    grid.setHeightByRows(10);
   
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
     grid.addSelectionListener(event -> {
@@ -126,7 +129,10 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     setMargin(true);
     
     
-    addButton.addClickListener(e -> editDialog.open());
+    addButton.addClickListener(e -> {
+      grid.deselectAll();
+      editDialog.open();
+    });
     editButton.addClickListener(e -> editDialog.open());
     deleteButton.addClickListener(e -> deleteDialog.open());
     

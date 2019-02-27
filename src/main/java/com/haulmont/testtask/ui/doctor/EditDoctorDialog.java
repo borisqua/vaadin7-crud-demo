@@ -3,6 +3,7 @@ package com.haulmont.testtask.ui.doctor;
 import com.haulmont.testtask.jpa.doctor.Doctor;
 import com.haulmont.testtask.jpa.doctor.DoctorRepository;
 import com.haulmont.testtask.ui.PersonForm;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 @SuppressWarnings("unused")
 class EditDoctorDialog extends PersonForm {
   
-  private final TextField specializationField = new TextField("Специализация");
+  private final TextField specializationField = prepareTextField("Специализация", "", true);
   private final DoctorsGrid doctorsGrid;
   
   private String name;
@@ -45,28 +46,50 @@ class EditDoctorDialog extends PersonForm {
       specializationField.setValue("");
     }
     getOKButton().addClickListener(event -> {
-      try {
-        name = nameField.getValue();
-        surname = surnameField.getValue();
-        patronymic = patronymicField.getValue();
-        specialization = specializationField.getValue();
-        if (this.doctor == null) {
-          this.doctor = new Doctor(name, surname, patronymic, specialization);
-        } else {
-          this.doctor.setName(name);
-          this.doctor.setSurname(surname);
-          this.doctor.setPatronymic(patronymic);
-          this.doctor.setSpecialization(specialization);
-          this.doctorRepository.save(this.doctor);
+      if (formIsValid()) {
+        try {
+          name = nameField.getValue();
+          surname = surnameField.getValue();
+          patronymic = patronymicField.getValue();
+          specialization = specializationField.getValue();
+          if (this.doctor == null) {
+            this.doctor = new Doctor(name, surname, patronymic, specialization);
+          } else {
+            this.doctor.setName(name);
+            this.doctor.setSurname(surname);
+            this.doctor.setPatronymic(patronymic);
+            this.doctor.setSpecialization(specialization);
+            this.doctorRepository.save(this.doctor);
+          }
+          this.doctorsGrid.updateList(Doctor.class);
+        } catch (DataIntegrityViolationException dataIntegrityError) {
+          LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE SAVING PATIENT ENTITY -> {}", dataIntegrityError);
+          dataIntegrityError.printStackTrace();
+        } catch (NumberFormatException e) {
+          LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE SAVING PATIENT ENTITY -> {}", e);
+          e.printStackTrace();
+        } finally {
+          isOpened = false;
+          this.doctor = null;
+          close();
         }
-        this.doctorsGrid.updateList(Doctor.class);
-      } catch (DataIntegrityViolationException dataIntegrityError) {
-        LOGGER.debug("HaulmontLOG4J2: DATA INTEGRITY ERROR WHILE SAVING PATIENT ENTITY -> {}", dataIntegrityError);
-        dataIntegrityError.printStackTrace();
-      } catch (NumberFormatException e) {
-        LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE SAVING PATIENT ENTITY -> {}", e);
-        e.printStackTrace();
+      } else {
+        Notification.show("Данные введены не полностью или неверный формат данных", Notification.Type.TRAY_NOTIFICATION);
       }
     });
+  
   }
+  
+  @Override
+  protected Boolean formIsValid(){
+    Boolean personsFieldsValid = super.formIsValid();
+    specializationField.setValidationVisible(true);
+//    try {
+//      specializationField.validate();
+//    } catch (Validator.InvalidValueException e) {
+//      Notification.show("Необходимо правильно заполнить поле 'Специализация'", Notification.Type.ERROR_MESSAGE);
+//    }
+    return  personsFieldsValid && specializationField.isValid();
+  }
+  
 }

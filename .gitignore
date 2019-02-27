@@ -1,13 +1,11 @@
 target/
 dump/
 !.mvn/wrapper/maven-wrapper.jar
-!ui/
 
 ### misc. & OS specific ###
 desktop.ini
-git-add-commit-push.cmd
+gitadd-commit-push.cmd
 
-garbage
 ### STS ###
 .apt_generated
 .classpath
@@ -23,10 +21,3 @@ garbage
 *.iml
 *.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-/build/

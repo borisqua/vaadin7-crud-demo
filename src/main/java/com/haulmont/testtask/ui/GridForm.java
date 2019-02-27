@@ -27,10 +27,14 @@ public class GridForm<T> extends VerticalLayout implements View {
   
     Label label = new Label(gridCaption);
     label.setStyleName(ValoTheme.LABEL_HUGE);
+    
+    setMargin(true);
   
     grid.setSizeFull();
     grid.setEditorEnabled(false);
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+    grid.setHeight(15, Unit.CM);
+    grid.setHeightByRows(10);
   
     setWidth(100, Sizeable.Unit.PERCENTAGE);
   
@@ -40,7 +44,6 @@ public class GridForm<T> extends VerticalLayout implements View {
     buttonsLayout.setMargin(true);
     HorizontalLayout controlsLayout = new HorizontalLayout();
     controlsLayout.setSizeFull();
-    setMargin(true);
     
     buttonsLayout.addComponents(addButton, editButton, deleteButton);
     controlsLayout.addComponents(label, buttonsLayout);

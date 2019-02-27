@@ -12,7 +12,7 @@ import com.vaadin.ui.UI;
 
 @SuppressWarnings("unused")
 @SpringView
-@Title("Haulmont test app / Doctors")
+@Title("Haulmont test app / Врачи")
 @Theme("valo")
 public class DoctorsGrid extends GridForm<Doctor> {
   
@@ -61,7 +61,10 @@ public class DoctorsGrid extends GridForm<Doctor> {
     
     EditDoctorDialog editDoctorDialog = new EditDoctorDialog("Врач", UI.getCurrent(), this, doctor, doctorRepository);
     
-    addButton.addClickListener(e -> editDialog.open());
+    addButton.addClickListener(e -> {
+      grid.deselectAll();
+      editDialog.open();
+    });
     editButton.addClickListener(e -> editDialog.open());
     deleteButton.addClickListener(e -> deleteDialog.open());
     

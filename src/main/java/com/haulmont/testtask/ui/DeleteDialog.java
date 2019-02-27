@@ -21,7 +21,6 @@ public class DeleteDialog<T> extends ModalDialog {
     
     super(caption, hostUI);
   
-    getOKButton().setEnabled(true);
     this.entity = entity;
     this.repository = repository;
     
@@ -38,6 +37,9 @@ public class DeleteDialog<T> extends ModalDialog {
         this.repository.delete(this.entity);
       } catch (DataIntegrityViolationException e) {
         Notification.show("Запись не может быть удалена. Похоже на эту запись существуют сслыки в рецептах, сначала нужно удалить эти рецепты", Notification.Type.ERROR_MESSAGE);
+      } finally {
+        isOpened = false;
+        close();
       }
     });
   }
