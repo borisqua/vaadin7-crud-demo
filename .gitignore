@@ -1,6 +1,7 @@
 target/
 dump/
 !.mvn/wrapper/maven-wrapper.jar
+!ui/
 
 ### misc. & OS specific ###
 desktop.ini
