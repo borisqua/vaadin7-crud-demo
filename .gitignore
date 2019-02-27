@@ -1,7 +1,5 @@
 target/
 dump/
-dump
-garbage
 !.mvn/wrapper/maven-wrapper.jar
 
 ### misc. & OS specific ###
