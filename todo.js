@@ -9,15 +9,16 @@
 //>> 7. add, edit, delete buttons, inside column with buttons
 //>> 8. vaadin views
 //>> 9. vaadin menu
-//todo>> 10. vaadin forms
-//todo>> 10.1 doctor form
-//todo>> 10.2 patient form
-//todo>> 10.3 prescription form
-//todo>> 11. statistics chart to the Start page
-//todo>> 12. publish
-//todo>> 13. email to haulmont
+//>> 10. vaadin forms
+//>> 10.1 doctor form
+//>> 10.2 patient form
+//>> 10.3 prescription form
+//>> 11. statistics chart to the Start page
+//todo>> 12. fix error in form validation
+//todo>> 13. publish
+//todo>> 14. email to haulmont
 
-//todo>>check with Java.util.Date / Java.sql.Date / Java.time mess all around
+//>>check with Java.util.Date / Java.sql.Date / Java.time mess all around
 //
 // java.util.Date date = java.sql.Date.valueOf(localDate);
 // LocalDate ld = new java.sql.Date(date.getTime()).toLocalDate()
