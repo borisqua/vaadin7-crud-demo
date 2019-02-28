@@ -33,6 +33,7 @@ public class PatientsGrid extends GridForm<Patient> {
           editButton.setEnabled(true);
           deleteButton.setEnabled(true);
         } else {
+          this.patientId = -1L;
           editButton.setEnabled(false);
           deleteButton.setEnabled(false);
         }
@@ -50,14 +51,14 @@ public class PatientsGrid extends GridForm<Patient> {
     });
     editButton.addClickListener(e -> {
       this.patientId= ((Patient) (grid.getSelectionModel()).getSelectedRows().toArray()[0]).getId();
-      this.patientRepository.findById(patientId).ifPresent(p -> this.patient = p);
+      this.patientRepository.findById(this.patientId).ifPresent(p -> this.patient = p);
       editDialog = new EditPatientDialog("Пациент", UI.getCurrent(), this, "Изменить запись",
         this.patient, this.patientRepository);
       editDialog.open();
     });
     deleteButton.addClickListener(e -> {
       this.patientId= ((Patient) (grid.getSelectionModel()).getSelectedRows().toArray()[0]).getId();
-      this.patientRepository.findById(patientId).ifPresent(p -> this.patient = p);
+      this.patientRepository.findById(this.patientId).ifPresent(p -> this.patient = p);
       deleteDialog = new DeletePatientDialog("", UI.getCurrent(), this,
         "Удалить выбранную запись?", this.patient, this.patientRepository);
       deleteDialog.open();

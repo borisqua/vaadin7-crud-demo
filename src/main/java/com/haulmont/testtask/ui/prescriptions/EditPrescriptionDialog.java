@@ -154,33 +154,6 @@ class EditPrescriptionDialog extends ModalDialog {
   
   private Boolean formIsValid() {
     setValidationVisibility(true);
-//    try {
-//      patientComboBox.validate();
-//      doctorComboBox.validate();
-//    } catch (Validator.InvalidValueException ignored) {
-//      Notification.show("Необходимо выбрать имя из списка", Notification.Type.TRAY_NOTIFICATION);
-//    }
-//    try {
-//      prescriptionField.validate();
-//    } catch (Validator.InvalidValueException ignored) {
-//      Notification.show("Необходимо заполнить содержание рецепта", Notification.Type.TRAY_NOTIFICATION);
-//    }
-//    try {
-//      priorityComboBox.validate();
-//    } catch (Validator.InvalidValueException ignored) {
-//      Notification.show("Необходимо выбрать приоритет из списка", Notification.Type.TRAY_NOTIFICATION);
-//    }
-//    try {
-//      issueDateField.validate();
-//    } catch (Validator.InvalidValueException ignored) {
-//      Notification.show("Необходимо правильно ввести дату выдачи рецепта", Notification.Type.TRAY_NOTIFICATION);
-//    }
-//    try {
-//      validityLengthField.validate();
-//    } catch (Validator.InvalidValueException ignored) {
-//      Notification.show("Необходимо правильно срок действия рецепта в днях от 1 до 365", Notification.Type.TRAY_NOTIFICATION);
-//    }
-    
     return this.prescriptionField.isValid() && this.doctorComboBox.isValid() && this.patientComboBox.isValid() &&
       this.priorityComboBox.isValid() && this.issueDateField.isValid() && this.validityLengthField.isValid();
   }

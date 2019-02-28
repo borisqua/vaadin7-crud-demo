@@ -108,11 +108,6 @@ class EditDoctorDialog extends PersonForm {
   protected Boolean formIsValid() {
     setValidationVisibility(true);
     Boolean personsFieldsValid = super.formIsValid();
-//    try {
-//      specializationField.validate();
-//    } catch (Validator.InvalidValueException e) {
-//      Notification.show("Необходимо правильно заполнить поле 'Специализация'", Notification.Type.TRAY_NOTIFICATION);
-//    }
     return personsFieldsValid && this.specializationField.isValid();
   }
   

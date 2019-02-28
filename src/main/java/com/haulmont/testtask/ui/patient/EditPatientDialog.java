@@ -108,11 +108,6 @@ class EditPatientDialog extends PersonForm {
   protected Boolean formIsValid() {
     setValidationVisibility(true);
     Boolean personsFieldsValid = super.formIsValid();
-//    try {
-//      phoneField.validate();
-//    } catch (Validator.InvalidValueException e) {
-//      Notification.show("Необходимо правильно заполнить поле 'Телефон'", Notification.Type.TRAY_NOTIFICATION);
-//    }
     return personsFieldsValid && this.phoneField.isValid();
   }
   
