@@ -11,6 +11,8 @@ import com.vaadin.server.Sizeable;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -20,8 +22,9 @@ import java.util.List;
 public class StartView extends VerticalLayout implements View {
   
   final private Grid grid;
-  //  private static final Logger LOGGER = LogManager.getLogger();
   final private DoctorResultsRepository doctorResultsRepository;
+  
+  private static final Logger LOGGER = LogManager.getLogger();
   
   public StartView(DoctorResultsRepository doctorResultsRepository) {
     
@@ -61,7 +64,7 @@ public class StartView extends VerticalLayout implements View {
     
     ui.setPollInterval(2000);
     ui.addPollListener(e -> {
-//      LOGGER.info("HaulmontLog4j2: Vaadin PollListener event.");
+      LOGGER.info("HaulmontLog4j2: Vaadin PollListener event.");
       this.grid.setContainerDataSource(
         new BeanItemContainer<>(DoctorResult.class, (List<DoctorResult>) this.doctorResultsRepository.findAll()));
     });
