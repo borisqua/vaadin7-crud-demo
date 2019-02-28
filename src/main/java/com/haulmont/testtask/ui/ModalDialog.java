@@ -5,6 +5,7 @@ import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
@@ -21,10 +22,13 @@ public class ModalDialog extends Window {
   private Button buttonOK = new Button("OK");
   private Button buttonCancel = new Button("Cancel");
   
-  public ModalDialog(String caption, UI hostUI) {
+  public ModalDialog(String caption, UI hostUI, String labelString) {
     
     super(caption);
-    
+  
+    Label label = new Label(labelString);
+    label.setStyleName(ValoTheme.LABEL_HUGE);
+  
     center();
     setModal(true);
     
@@ -40,6 +44,7 @@ public class ModalDialog extends Window {
     form.setWidth("100%");
     form.setMargin(true);
     form.setSpacing(true);
+    form.addComponent(label);
     
     HorizontalLayout buttonsLayout = new HorizontalLayout();
     buttonsLayout.addComponents(buttonOK, buttonCancel);

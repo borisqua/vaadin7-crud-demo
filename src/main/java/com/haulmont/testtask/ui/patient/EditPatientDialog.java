@@ -9,12 +9,13 @@ import com.vaadin.ui.UI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.lang.Nullable;
 
 @SuppressWarnings("unused")
 class EditPatientDialog extends PersonForm {
   
-  private final TextField phoneField = preparePhoneField("Телефон", true);
-  private final PatientsGrid patientsGrid;
+  private TextField phoneField;
+  private PatientsGrid patientsGrid;
   
   private String name;
   private String surname;
@@ -25,35 +26,47 @@ class EditPatientDialog extends PersonForm {
   
   private static final Logger LOGGER = LogManager.getLogger();
   
-  EditPatientDialog(String caption, UI hostUI, PatientsGrid patientsGrid,
-                    Patient patient, PatientRepository patientRepository) {
-    super(caption, hostUI);
+  EditPatientDialog(String caption, UI hostUI, PatientsGrid patientsGrid, String titleString,
+                   @Nullable Patient patient,
+                   @Nullable PatientRepository patientRepository) {
+    
+    super(caption, hostUI, titleString);
+    
+    if (patientRepository == null) {
+      return;
+    }
+    
     this.patientsGrid = patientsGrid;
+    
+    this.phoneField = prepareTextField("Телефон", "", true);
+    
     this.patient = patient;
     this.patientRepository = patientRepository;
-  
-    form.addComponent(phoneField);
+    
+    form.addComponent(this.phoneField);
     
     if (this.patient != null) {
-      nameField.setValue(this.patient.getName());
-      surnameField.setValue(this.patient.getSurname());
-      patronymicField.setValue(this.patient.getPatronymic());
-      phoneField.setValue(this.patient.getPhone());
+      this.nameField.setValue(this.patient.getName());
+      this.surnameField.setValue(this.patient.getSurname());
+      this.patronymicField.setValue(this.patient.getPatronymic());
+      this.phoneField.setValue(this.patient.getPhone());
     } else {
-      nameField.setValue("");
-      surnameField.setValue("");
-      patronymicField.setValue("");
-      phoneField.setValue("");
+      this.nameField.setValue("");
+      this.surnameField.setValue("");
+      this.patronymicField.setValue("");
+      this.phoneField.setValue("");
     }
+    
     getOKButton().addClickListener(event -> {
       if (formIsValid()) {
         try {
-          name = nameField.getValue();
-          surname = surnameField.getValue();
-          patronymic = patronymicField.getValue();
-          phone = phoneField.getValue();
+          name = this.nameField.getValue();
+          surname = this.surnameField.getValue();
+          patronymic = this.patronymicField.getValue();
+          phone = this.phoneField.getValue();
           if (this.patient == null) {
             this.patient = new Patient(name, surname, patronymic, phone);
+            this.patientRepository.save(this.patient);
           } else {
             this.patient.setName(name);
             this.patient.setSurname(surname);
@@ -69,25 +82,39 @@ class EditPatientDialog extends PersonForm {
           LOGGER.debug("HaulmontLOG4J2:  UNKNOWN ERROR WHILE SAVING PATIENT ENTITY -> {}", e);
           e.printStackTrace();
         } finally {
-          this.patient = null;
-          isOpened = false;
           close();
         }
       } else {
-        Notification.show("Данные введены не полностью или неверный формат данных", Notification.Type.TRAY_NOTIFICATION);
+        Notification.show("Данные введены не полностью или неверный формат данных", Notification.Type./*TRAY_NOTIFICATION*/TRAY_NOTIFICATION);
       }
     });
+    
+    addCloseListener(event -> {
+      this.phoneField.setValidationVisible(false);
+      this.phoneField.setValue("");
+      this.patient = null;
+      isOpened = false;
+    });
+    
   }
   
   @Override
-  protected Boolean formIsValid(){
+  protected void setValidationVisibility(Boolean isVisible) {
+    super.setValidationVisibility(isVisible);
+    this.phoneField.setValidationVisible(isVisible);
+  }
+  
+  @Override
+  protected Boolean formIsValid() {
+    setValidationVisibility(true);
     Boolean personsFieldsValid = super.formIsValid();
-    phoneField.setValidationVisible(true);
 //    try {
 //      phoneField.validate();
 //    } catch (Validator.InvalidValueException e) {
-//      Notification.show("Необходимо правильно заполнить поле 'Телефон'", Notification.Type.ERROR_MESSAGE);
+//      Notification.show("Необходимо правильно заполнить поле 'Телефон'", Notification.Type.TRAY_NOTIFICATION);
 //    }
-    return  personsFieldsValid && phoneField.isValid();
+    return personsFieldsValid && this.phoneField.isValid();
   }
+  
 }
+

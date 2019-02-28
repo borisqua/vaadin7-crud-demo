@@ -7,7 +7,6 @@ import com.haulmont.testtask.ui.ModalDialog;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("unused")
@@ -24,32 +23,16 @@ public class PatientsGrid extends GridForm<Patient> {
   private DeletePatientDialog deleteDialog;
   
   public PatientsGrid(PatientRepository patientRepository) {
-  
+    
     super(Patient.class, "Пациенты", patientRepository);
     
     this.patientRepository = patientRepository;
-  
-    editDialog = new EditPatientDialog("ПациентПациент", UI.getCurrent(), this,
-      null, this.patientRepository);
-    deleteDialog = new DeletePatientDialog("", UI.getCurrent(), this,
-      "Удалить выбранную запись?", null, this.patientRepository);
-  
+    
     grid.addSelectionListener(event -> {
         if (event.getSelected().size() > 0) {
-          patient = (Patient) event.getSelected().toArray()[0];
-          patientId = patient.getId();
-          Notification.show(patient.toString(), Notification.Type.TRAY_NOTIFICATION);
-          editDialog = new EditPatientDialog("Пациент", UI.getCurrent(), this,
-            patient, this.patientRepository);
-          deleteDialog = new DeletePatientDialog("", UI.getCurrent(), this,
-            "Удалить выбранную запись?", patient, this.patientRepository);
           editButton.setEnabled(true);
           deleteButton.setEnabled(true);
         } else {
-          editDialog = new EditPatientDialog("Пациент", UI.getCurrent(), this,
-            null, this.patientRepository);
-          deleteDialog = new DeletePatientDialog("", UI.getCurrent(), this,
-            "Удалить выбранную запись?", null, this.patientRepository);
           editButton.setEnabled(false);
           deleteButton.setEnabled(false);
         }
@@ -59,14 +42,26 @@ public class PatientsGrid extends GridForm<Patient> {
     setColumns(/*"id", */"surname", "name", "patronymic", "phone");
     setColumnCaptions(/*"id", */"Фамилия", "Имя", "Отчество", "Телефон");
     
-    EditPatientDialog editPatientDialog = new EditPatientDialog("Пациент", UI.getCurrent(), this, patient, patientRepository);
-    
     addButton.addClickListener(e -> {
       grid.deselectAll();
+      editDialog = new EditPatientDialog("Пациент", UI.getCurrent(), this, "Добавить запись",
+        null, this.patientRepository);
       editDialog.open();
     });
-    editButton.addClickListener(e -> editDialog.open());
-    deleteButton.addClickListener(e -> deleteDialog.open());
+    editButton.addClickListener(e -> {
+      this.patientId= ((Patient) (grid.getSelectionModel()).getSelectedRows().toArray()[0]).getId();
+      this.patientRepository.findById(patientId).ifPresent(p -> this.patient = p);
+      editDialog = new EditPatientDialog("Пациент", UI.getCurrent(), this, "Изменить запись",
+        this.patient, this.patientRepository);
+      editDialog.open();
+    });
+    deleteButton.addClickListener(e -> {
+      this.patientId= ((Patient) (grid.getSelectionModel()).getSelectedRows().toArray()[0]).getId();
+      this.patientRepository.findById(patientId).ifPresent(p -> this.patient = p);
+      deleteDialog = new DeletePatientDialog("", UI.getCurrent(), this,
+        "Удалить выбранную запись?", this.patient, this.patientRepository);
+      deleteDialog.open();
+    });
     
   }
   

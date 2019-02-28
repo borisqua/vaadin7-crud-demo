@@ -70,6 +70,6 @@ public class StartView extends VerticalLayout implements View {
   
   @Override
   public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-    Notification.show("Start view. OK", Notification.Type.HUMANIZED_MESSAGE/*TRAY_NOTIFICATION*/);
+//    Notification.show("Start view. OK", Notification.Type.HUMANIZED_MESSAGE/*TRAY_NOTIFICATION*/);
   }
 }

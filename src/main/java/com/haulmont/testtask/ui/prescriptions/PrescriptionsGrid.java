@@ -48,7 +48,6 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
   private Grid grid = new Grid();
   private ModalDialog editDialog;
   private DeletePrescriptionDialog deleteDialog;
-  
   private Prescription prescription;
   
   public PrescriptionsGrid(PatientRepository patientRepository,
@@ -61,13 +60,13 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     this.prescriptionRepository = prescriptionRepository;
     
     this.prescriptionHumanizedRepository = prescriptionHumanizedRepository;
-  
+    
     setSizeFull();
     
-    editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this,
-      null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
-    deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this,
-      "Удалить выбранную запись?", null, this.prescriptionRepository);
+//    editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this,
+//      "Изменение данных", null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
+//    deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this,
+//      "Удалить выбранную запись?", null, this.prescriptionRepository);
     
     Label label = new Label("Рецепты");
     label.setStyleName(ValoTheme.LABEL_HUGE);
@@ -77,20 +76,25 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     grid.setColumns(/*"id", */"doctor", "patient", "prescription", "priority", "expiration");
     grid.setEditorEnabled(false);
     grid.setHeightByRows(10);
-  
+    
     grid.setSelectionMode(Grid.SelectionMode.SINGLE);
     grid.addSelectionListener(event -> {
         if (event.getSelected().size() > 0) {
-          prescriptionId = ((PrescriptionHumanized) event.getSelected().toArray()[0]).getId();
-          this.prescriptionRepository.findById(prescriptionId).ifPresent(e -> prescription = e);
-          Notification.show(prescription.toString(), Notification.Type.TRAY_NOTIFICATION);
-          deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this, "Удалить выбранную запись?", prescription, this.prescriptionRepository);
-          editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, prescription, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
+//          this.prescriptionId = ((PrescriptionHumanized) event.getSelected().toArray()[0]).getId();
+//          this.prescriptionRepository.findById(prescriptionId).ifPresent(p -> this.prescription = p);
+//          Notification.show(this.prescription.toString().getSelectedRows(), Notification.Type.TRAY_NOTIFICATION);
+//          deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this, "Удалить выбранную запись?",
+//            this.prescription, this.prescriptionRepository);
+//          editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, "Изменение данных",
+//            this.prescription, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
           editButton.setEnabled(true);
           deleteButton.setEnabled(true);
         } else {
-          deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this, "Удалить выбранную запись?", null, this.prescriptionRepository);
-          editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
+          this.prescriptionId = -1L;
+//          deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this, "",
+//            null, null);
+//          editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, "",
+//            null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
           editButton.setEnabled(false);
           deleteButton.setEnabled(false);
         }
@@ -131,10 +135,24 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     
     addButton.addClickListener(e -> {
       grid.deselectAll();
+      editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, "",
+        null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
       editDialog.open();
     });
-    editButton.addClickListener(e -> editDialog.open());
-    deleteButton.addClickListener(e -> deleteDialog.open());
+    editButton.addClickListener(e -> {
+      this.prescriptionId = ((PrescriptionHumanized) (grid.getSelectionModel()).getSelectedRows().toArray()[0]).getId();
+      this.prescriptionRepository.findById(prescriptionId).ifPresent(p -> this.prescription = p);
+      editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, "Изменение данных",
+        this.prescription, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
+      editDialog.open();
+    });
+    deleteButton.addClickListener(e -> {
+      this.prescriptionId = ((PrescriptionHumanized) (grid.getSelectionModel()).getSelectedRows().toArray()[0]).getId();
+      this.prescriptionRepository.findById(prescriptionId).ifPresent(p -> this.prescription = p);
+      deleteDialog = new DeletePrescriptionDialog("", UI.getCurrent(), this, "Удалить выбранную запись?",
+        this.prescription, this.prescriptionRepository);
+      deleteDialog.open();
+    });
     
     buttonsLayout.addComponents(addButton, editButton, deleteButton);
     controlsLayout.addComponents(label, buttonsLayout);
@@ -174,7 +192,7 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
   public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
   }
   
-  String getPrescriptionTextFilter(){
+  String getPrescriptionTextFilter() {
     return this.filterPrescriptionTextField.getValue();
   }
   
