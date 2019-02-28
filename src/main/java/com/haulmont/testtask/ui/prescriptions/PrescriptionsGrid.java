@@ -135,14 +135,14 @@ public class PrescriptionsGrid extends VerticalLayout implements View {
     
     addButton.addClickListener(e -> {
       grid.deselectAll();
-      editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, "",
+      editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, "Добавить запись",
         null, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
       editDialog.open();
     });
     editButton.addClickListener(e -> {
       this.prescriptionId = ((PrescriptionHumanized) (grid.getSelectionModel()).getSelectedRows().toArray()[0]).getId();
       this.prescriptionRepository.findById(prescriptionId).ifPresent(p -> this.prescription = p);
-      editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, "Изменение данных",
+      editDialog = new EditPrescriptionDialog("Рецепт", UI.getCurrent(), this, "Изменить запись",
         this.prescription, this.prescriptionRepository, this.doctorRepository, this.patientRepository);
       editDialog.open();
     });
