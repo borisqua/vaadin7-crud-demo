@@ -1,7 +1,7 @@
 package com.haulmont.testtask.jpa;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -21,7 +21,7 @@ public class RepositoryWithSoftFilterImpl<T> implements RepositoryWithSoftFilter
   @PersistenceContext
   private EntityManager entityManager;
   
-  private static final Logger LOGGER = LogManager.getLogger();
+  private static final Logger LOGGER = LoggerFactory.getLogger(RepositoryWithSoftFilterImpl.class.getName());
   
   @Override
   public List<T> findByCustomCriteria(Class<T> clazz, Map<String, String> criteria) {

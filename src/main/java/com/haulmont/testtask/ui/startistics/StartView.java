@@ -22,7 +22,7 @@ public class StartView extends VerticalLayout implements View {
   final private Grid grid;
   final private DoctorResultsRepository doctorResultsRepository;
   
-//  private static final Logger LOGGER = LogManager.getLogger();
+//  private static final Logger LOGGER = LoggerFactory.getLogger(Application.class.getName());
   
   public StartView(DoctorResultsRepository doctorResultsRepository) {
     

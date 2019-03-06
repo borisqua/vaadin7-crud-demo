@@ -1,7 +1,7 @@
 package com.haulmont.testtask.jpa.doctor;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,12 @@ import java.util.Optional;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-//@Controller
 @Service
 @RequestMapping(method = GET, path = "/doctors")
 public class DoctorController {
   
   private final DoctorRepository doctorRepository;
-  private static final Logger LOGGER = LogManager.getLogger();
+  private static final Logger LOGGER = LoggerFactory.getLogger(DoctorController.class.getName());
   
   @Autowired
   public DoctorController(DoctorRepository doctorRepository) {

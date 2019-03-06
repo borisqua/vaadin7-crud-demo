@@ -6,8 +6,8 @@ import com.haulmont.testtask.ui.PersonForm;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.lang.Nullable;
 
@@ -24,7 +24,7 @@ class EditPatientDialog extends PersonForm {
   private Patient patient;
   private PatientRepository patientRepository;
   
-  private static final Logger LOGGER = LogManager.getLogger();
+  private static final Logger LOGGER = LoggerFactory.getLogger(EditPatientDialog.class);
   
   EditPatientDialog(String caption, UI hostUI, PatientsGrid patientsGrid, String titleString,
                    @Nullable Patient patient,

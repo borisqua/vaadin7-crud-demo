@@ -1,5 +1,6 @@
 target/
 dump/
+logs/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### misc. & OS specific ###

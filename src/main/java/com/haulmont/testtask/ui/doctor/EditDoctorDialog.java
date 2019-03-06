@@ -6,8 +6,8 @@ import com.haulmont.testtask.ui.PersonForm;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.lang.Nullable;
 
@@ -24,7 +24,7 @@ class EditDoctorDialog extends PersonForm {
   private Doctor doctor;
   private DoctorRepository doctorRepository;
   
-  private static final Logger LOGGER = LogManager.getLogger();
+  private static final Logger LOGGER = LoggerFactory.getLogger(EditDoctorDialog.class);
   
   EditDoctorDialog(String caption, UI hostUI, DoctorsGrid doctorsGrid, String titleString,
                    @Nullable Doctor doctor,
@@ -85,7 +85,7 @@ class EditDoctorDialog extends PersonForm {
           close();
         }
       } else {
-        Notification.show("Данные введены не полностью или неверный формат данных", Notification.Type./*TRAY_NOTIFICATION*/TRAY_NOTIFICATION);
+        Notification.show("Данные введены не полностью или неверный формат данных", Notification.Type.TRAY_NOTIFICATION);
       }
     });
     

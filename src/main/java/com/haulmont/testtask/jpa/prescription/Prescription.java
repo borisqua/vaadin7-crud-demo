@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class Prescription {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue//(strategy = GenerationType.TABLE)
   @Column(name="id")
   private Long id;
   @Column(name="description")

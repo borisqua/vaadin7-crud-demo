@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class Doctor {
   
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue//(strategy = GenerationType.TABLE)
   @Column(name="id")
   private Long id;
   @Column(name="name")
@@ -22,10 +22,14 @@ public class Doctor {
   
   public Doctor(){}
   public Doctor(String name, String surname){
+    
     this(name, surname, "", "");
+    
   }
   public Doctor(String name, String surname, String specialization){
+    
     this(name, surname, "", specialization);
+    
   }
   public Doctor(String name, String surname, String patronymic, String specialization) {
     

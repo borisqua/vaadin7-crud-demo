@@ -91,7 +91,7 @@ public class HaulmontTestTaskUI extends UI {
   }
 
 //  @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
-//  @VaadinServletConfiguration(ui = MainView.class, productionMode = false)
+//  @VaadinServletConfiguration(ui = HaulmontTestTaskUI.class, productionMode = true)
 //  public static class MyUIServlet extends VaadinServlet {
 //  }
 }
