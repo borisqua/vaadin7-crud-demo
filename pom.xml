@@ -49,7 +49,7 @@
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-spring-boot-starter</artifactId>
-      <version>14.0.5</version>
+      <version>14.1.0</version>
       <!--<scope>runtime</scope>-->
     </dependency>
     
